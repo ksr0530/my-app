@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// 1. 사용자 (User)
+model User {
+  id                String      @id @db.VarChar(50)     // 아이디 (기본키)
+  name              String      @db.VarChar(50)         // 이름
+  email             String      @unique @db.VarChar(50) // 이메일 (중복 불가)
+  password          String      @db.VarChar(50)         // 비밀번호
+  university        String      @db.VarChar(50)         // 대학교
+  isStudentVerified Boolean?    @default(false)         // 재학생 인증 여부 (기본값: 거짓)
+  reviews           Review[]                            // 작성한 리뷰 목록
+  communities       Community[]                         // 작성한 커뮤니티 목록
+}
+
+// 2. 식당 (Restaurant)
+model Restaurant {
+  restaurantId String   @id @db.VarChar(50) // 식당아이디 (기본키)
+  name         String   @db.VarChar(100)    // 이름
+  description  String?  @db.Text            // 소개글
+  latitude     Float?                       // 위도
+  longitude    Float?                       // 경도
+  avgRating    Float?   @default(0.0)       // 평균 별점
+  reviews      Review[]                     // 이 식당에 달린 리뷰 목록
+}
+
+// 3. 리뷰 (Review)
+model Review {
+  reviewId     String        @id @db.VarChar(50) // 리뷰아이디 (기본키)
+  userId       String        @db.VarChar(50)     // 작성자 회원아이디 (외래키)
+  restaurantId String        @db.VarChar(50)     // 식당아이디 (외래키)
+  content      String        @db.Text            // 내용
+  rating       Int                               // 별점 (1~5 정수)
+  createdAt    DateTime      @default(now())     // 작성일 (자동 입력)
+  user         User          @relation(fields: [userId], references: [id])
+  restaurant   Restaurant    @relation(fields: [restaurantId], references: [restaurantId])
+  photos       ReviewPhoto[]                     // 첨부된 사진 목록
+}
+
+// 4. 리뷰사진 (ReviewPhoto)
+model ReviewPhoto {
+  photoId  BigInt @id @default(autoincrement()) // 사진아이디 (기본키, 자동 증가)
+  reviewId String @db.VarChar(50)               // 리뷰아이디 (외래키)
+  photoUrl String @db.VarChar(255)              // 사진URL 주소
+  review   Review @relation(fields: [reviewId], references: [reviewId], onDelete: Cascade)
+}
+
+// 5. 커뮤니티 (Community)
+model Community {
+  postId       String  @id @db.VarChar(50) // 게시글아이디 (기본키)
+  userId       String  @db.VarChar(50)     // 회원아이디 (외래키)
+  title        String  @db.VarChar(255)    // 제목
+  targetCount  Int                         // 목표인원
+  currentCount Int     @default(1)         // 현재인원 (기본값: 1)
+  isClosed     Boolean @default(false)     // 마감여부 (기본값: 거짓)
+  user         User    @relation(fields: [userId], references: [id])
+}
