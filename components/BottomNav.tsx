@@ -1,34 +1,18 @@
+"use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const items = [
+  { href: "/", label: "홈", icon: "⌂" },
+  { href: "/map", label: "지도", icon: "♧" },
+  { href: "/community", label: "채팅", icon: "▱" },
+  { href: "/mypage", label: "마이페이지", icon: "⚙" },
+];
 
 export default function BottomNav() {
-  return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
-      <ul className="flex justify-around items-center h-16 text-xs text-gray-500">
-        <li>
-          <Link href="/" className="flex flex-col items-center">
-            <span className="text-xl mb-1">🏠</span>
-            <span>홈</span>
-          </Link>
-        </li>
-        <li>
-          <Link href="/map" className="flex flex-col items-center">
-            <span className="text-xl mb-1">📍</span>
-            <span>지도</span>
-          </Link>
-        </li>
-        <li>
-          <Link href="/community" className="flex flex-col items-center">
-            <span className="text-xl mb-1">👥</span>
-            <span>커뮤니티</span>
-          </Link>
-        </li>
-        <li>
-          <Link href="/mypage" className="flex flex-col items-center">
-            <span className="text-xl mb-1">👤</span>
-            <span>마이페이지</span>
-          </Link>
-        </li>
-      </ul>
-    </nav>
-  );
+  const pathname = usePathname();
+  return <nav className="bottom-nav" aria-label="주요 메뉴"><ul className="mx-auto grid h-full max-w-[430px] grid-cols-4">{items.map((item) => {
+    const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+    return <li key={item.href}><Link href={item.href} data-active={active} aria-current={active ? "page" : undefined} className="flex h-full flex-col items-center justify-center gap-0.5 border-r border-[#e8e8e3] text-[10px] last:border-r-0"><span className="text-[23px] leading-6">{item.icon}</span><span>{item.label}</span></Link></li>;
+  })}</ul></nav>;
 }

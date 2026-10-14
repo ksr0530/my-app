@@ -1,69 +1,13 @@
-import Image from "next/image";
+import Link from "next/link";
+import { getCommunities, getRestaurants } from "../lib/appData";
+export const dynamic = "force-dynamic";
 
-export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+export default async function Home() {
+  const [restaurants, communities] = await Promise.all([getRestaurants(), getCommunities()]);
+  return <section className="page">
+    <div className="page-pad pt-2"><div className="figma-search"><span>⌕</span><span>우리 학교 주변에 뭐가 있을까?</span><span className="ml-auto text-base">☷</span></div></div>
+    <div className="filter-row"><span className="figma-chip active">전체</span><span className="figma-chip">1인</span><span className="figma-chip">2인</span><span className="figma-chip">4인</span><span className="figma-chip">6인</span><span className="figma-chip">단체</span></div>
+    <div className="bg-white px-5 py-4"><div className="flex items-center justify-between"><h1 className="section-title">오늘 밥은 이거 어때요?</h1><Link href="/map" className="text-xs text-[#777]">더보기 ›</Link></div><div className="mt-3 grid grid-cols-2 gap-2">{restaurants.slice(0,4).map((restaurant, index) => <Link href="/map" key={restaurant.restaurantId} className="figma-card overflow-hidden"><div className={`flex h-24 items-center justify-center text-3xl ${index % 2 ? "bg-[#e7d3a1]" : "bg-[#d7d7d7]"}`}>{["🍚","🍙","🌶️","🍜"][index]}</div><div className="p-2"><p className="truncate text-sm font-bold">{restaurant.name}</p><p className="mt-1 text-[10px] text-[#777]">★ {restaurant.avgRating.toFixed(1)}({index + 4})</p></div></Link>)}</div></div>
+    <div className="mt-3 bg-white px-5 py-4"><div className="flex items-center justify-between"><h2 className="section-title">같이 먹어요!</h2><Link href="/community" className="text-xs text-[#777]">더보기 ›</Link></div><div className="mt-3 space-y-2">{communities.slice(0,3).map((post) => <Link href="/community" key={post.postId} className="flex items-center justify-between border-b border-[#e2e2dd] py-3"><div><p className="text-sm font-semibold">{post.title}</p><p className="mt-1 text-[10px] text-[#888]">{post.author} · 글 내용 작성</p></div><span className="text-xs">♙ {post.currentCount}/{post.targetCount}</span></Link>)}</div></div>
+  </section>;
 }

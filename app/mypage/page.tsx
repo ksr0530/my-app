@@ -1,0 +1,7 @@
+import { getReviews } from "../../lib/appData";
+export const dynamic = "force-dynamic";
+
+export default async function MyPage() {
+  const reviews = await getReviews();
+  return <section className="page page-pad pt-10"><div className="flex items-center justify-between"><div><p className="kicker">쩝쩝대</p><h1 className="section-title mt-1 text-3xl">마이페이지</h1></div><span className="text-xl text-[#777]">⋯</span></div><div className="mt-8 flex flex-col items-center"><div className="h-32 w-32 rounded-full bg-gradient-to-b from-blue-500 via-sky-400 to-white shadow-inner" /><h2 className="mt-5 text-2xl font-bold">홍길동</h2><p className="mt-1 text-xs">gildong.hong@example.com</p></div><div className="mt-8 space-y-3"><button className="flex w-full justify-between rounded-xl bg-[#d0d0d0] px-5 py-4 text-left text-sm text-[#6f7779]">내가 작성한 리뷰 <span>›</span></button><button className="flex w-full justify-between rounded-xl bg-[#d0d0d0] px-5 py-4 text-left text-sm text-[#6f7779]">받은 쪽지 <span>›</span></button><button className="flex w-full justify-between rounded-xl bg-[#d0d0d0] px-5 py-4 text-left text-sm text-[#6f7779]">재학생 인증 <span>›</span></button><button className="flex w-full justify-between rounded-xl bg-[#d0d0d0] px-5 py-4 text-left text-sm text-[#6f7779]">고객센터 <span>›</span></button></div><button className="mt-4 w-full rounded-xl bg-[#a9abad] py-3 text-sm text-white">로그아웃</button><div className="sr-only">{reviews.length}개의 리뷰</div></section>;
+}
