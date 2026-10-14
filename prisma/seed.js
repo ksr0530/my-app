@@ -118,6 +118,14 @@ const restaurants = [
     longitude: 127.127,
     avgRating: 4.5,
   },
+  {
+    restaurantId: "restaurant-010",
+    name: "학생회관 석식당",
+    description: "수업 후 든든하게 먹기 좋은 교내 석식 식당",
+    latitude: 37.1232,
+    longitude: 127.1281,
+    avgRating: 3.9,
+  },
 ];
 
 const reviews = [
@@ -135,6 +143,7 @@ const reviews = [
   ["review-012", "user-hyemin", "restaurant-009", "신선하고 소스 선택지가 많아서 좋습니다.", 5, "2026-10-12"],
   ["review-013", "user-minjun", "restaurant-010", "수업 끝나고 먹기 좋은 든든한 석식 메뉴예요.", 4, "2026-10-12"],
   ["review-014", "user-junho", "restaurant-003", "친구들과 나눠 먹기 좋은 메뉴예요.", 4, "2026-10-13"],
+  ["review-015", "user-sarang", "restaurant-007", "배달메이트를 구해서 배달비를 아꼈어요.", 4, "2026-10-13"],
 ];
 
 const communities = [
@@ -142,7 +151,7 @@ const communities = [
   ["post-002", "user-hyemin", "마루 덮밥 배달메이트 구합니다", 3, 1, false],
   ["post-003", "user-minjun", "오늘 저녁 정든 부대찌개 드실 분", 5, 3, false],
   ["post-004", "user-seoyeon", "최소주문금액 맞춰서 같이 주문해요", 4, 4, true],
-  
+  ["post-005", "user-junho", "오늘 저녁 학생회관 석식 같이 먹을 사람", 4, 2, false],
 ];
 
 async function main() {
