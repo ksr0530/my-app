@@ -40,7 +40,6 @@ export const demoCommunities: CommunityCard[] = [
   { postId: "post-002", title: "마루 덮밥 배달메이트 구합니다", currentCount: 1, targetCount: 3, isClosed: false, author: "이혜민" },
   { postId: "post-003", title: "오늘 저녁 정든 부대찌개 드실 분", currentCount: 3, targetCount: 5, isClosed: false, author: "박민준" },
   { postId: "post-004", title: "최소주문금액 맞춰서 같이 주문해요", currentCount: 4, targetCount: 4, isClosed: true, author: "최서연" },
-  { postId: "post-005", title: "시험 끝나고 밤마실 포차 갈 사람", currentCount: 2, targetCount: 6, isClosed: false, author: "정준호" },
 ];
 
 export const demoReviews: ReviewCard[] = [
