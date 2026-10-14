@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
 const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
@@ -119,14 +118,6 @@ const restaurants = [
     longitude: 127.127,
     avgRating: 4.5,
   },
-  {
-    restaurantId: "restaurant-010",
-    name: "밤마실 포차",
-    description: "저녁에 친구들과 방문하기 좋은 안주 맛집",
-    latitude: 37.1232,
-    longitude: 127.1281,
-    avgRating: 3.9,
-  },
 ];
 
 const reviews = [
@@ -142,9 +133,8 @@ const reviews = [
   ["review-010", "user-junho", "restaurant-007", "치킨이 바삭하고 배달이 빨랐어요.", 5, "2026-10-11"],
   ["review-011", "user-sarang", "restaurant-008", "여럿이 먹기 좋고 사리가 다양해요.", 4, "2026-10-11"],
   ["review-012", "user-hyemin", "restaurant-009", "신선하고 소스 선택지가 많아서 좋습니다.", 5, "2026-10-12"],
-  ["review-013", "user-minjun", "restaurant-010", "안주 종류가 많지만 조금 시끄러운 편이에요.", 4, "2026-10-12"],
+  ["review-013", "user-minjun", "restaurant-010", "수업 끝나고 먹기 좋은 든든한 석식 메뉴예요.", 4, "2026-10-12"],
   ["review-014", "user-junho", "restaurant-003", "친구들과 나눠 먹기 좋은 메뉴예요.", 4, "2026-10-13"],
-  ["review-015", "user-sarang", "restaurant-007", "배달메이트를 구해서 배달비를 아꼈어요.", 4, "2026-10-13"],
 ];
 
 const communities = [
@@ -152,7 +142,7 @@ const communities = [
   ["post-002", "user-hyemin", "마루 덮밥 배달메이트 구합니다", 3, 1, false],
   ["post-003", "user-minjun", "오늘 저녁 정든 부대찌개 드실 분", 5, 3, false],
   ["post-004", "user-seoyeon", "최소주문금액 맞춰서 같이 주문해요", 4, 4, true],
-  ["post-005", "user-junho", "시험 끝나고 밤마실 포차 갈 사람", 6, 2, false],
+  
 ];
 
 async function main() {
