@@ -1,28 +1,8 @@
-import StarRating from "../../components/StarRating";
+import { getReviews } from "../../lib/appData";
 
-export default function MyPage() {
-  return (
-    <section className="min-h-screen bg-slate-50 px-5 pb-24 pt-10">
-      <p className="text-sm font-semibold text-orange-500">쩝쩝대</p>
-      <h1 className="mt-2 text-3xl font-bold text-slate-900">마이페이지</h1>
-      <div className="mt-8 rounded-3xl bg-white p-6 shadow-sm">
-        <div className="flex items-center gap-4">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-orange-100 text-3xl">🙂</div>
-          <div>
-            <p className="font-bold text-slate-900">쩝쩝러님</p>
-            <p className="mt-1 text-sm text-slate-500">재학생 인증을 완료해 주세요</p>
-          </div>
-        </div>
-        <button className="mt-6 w-full rounded-xl bg-orange-500 py-3 font-semibold text-white">재학생 인증하기</button>
-      </div>
-      <div className="mt-4 rounded-3xl bg-white p-6 shadow-sm">
-        <h2 className="font-bold text-slate-900">내 리뷰</h2>
-        <div className="mt-4 flex items-center justify-between border-b border-slate-100 pb-4">
-          <div><p className="font-semibold text-slate-800">학교 앞 김치찌개</p><p className="mt-1 text-sm text-slate-400">맛있고 든든해요</p></div>
-          <StarRating value={5} readOnly size="sm" />
-        </div>
-        <p className="pt-4 text-center text-sm text-slate-400">작성한 리뷰를 모아볼 수 있어요.</p>
-      </div>
-    </section>
-  );
+export const dynamic = "force-dynamic";
+
+export default async function MyPage() {
+  const reviews = await getReviews();
+  return <section className="page"><p className="kicker">MY PAGE</p><h1 className="section-title mt-1 text-3xl">내 마이페이지</h1><div className="mt-7 flex flex-col items-center rounded-2xl bg-white/60 p-5"><div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#3c93e8] text-4xl">🧑🏻‍🍳</div><h2 className="mt-3 text-lg font-black text-[#102f54]">홍길동</h2><p className="mt-1 text-xs text-[#7a8490]">honggildong@university.ac.kr</p><span className="mt-3 rounded-full bg-[#102f54] px-3 py-1 text-[10px] font-bold text-white">✓ 재학생 인증 완료</span></div><div className="mt-4 grid grid-cols-3 gap-2"><div className="card p-3 text-center"><p className="text-xl font-black text-[#102f54]">12</p><p className="text-[10px] text-[#7a8490]">작성 리뷰</p></div><div className="card p-3 text-center"><p className="text-xl font-black text-[#102f54]">4</p><p className="text-[10px] text-[#7a8490]">참여 모임</p></div><div className="card p-3 text-center"><p className="text-xl font-black text-[#102f54]">4.8</p><p className="text-[10px] text-[#7a8490]">내 평점</p></div></div><div className="mt-8 w-full"><div className="flex items-end justify-between"><h2 className="section-title text-xl">내가 쓴 리뷰</h2><span className="text-xs text-[#7a8490]">전체보기 ›</span></div><div className="mt-3 space-y-3">{reviews.map((review) => <article key={review.reviewId} className="card p-4"><div className="flex justify-between"><p className="text-sm font-black text-[#102f54]">{review.restaurantName}</p><span className="star text-sm">{"★".repeat(review.rating)}</span></div><p className="mt-2 text-xs leading-5 text-[#596878]">{review.content}</p></article>)}</div></div></section>;
 }
