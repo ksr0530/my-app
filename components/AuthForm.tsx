@@ -28,7 +28,7 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
     const response = await fetch(`/api/auth/${mode}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
     const data = await response.json(); setLoading(false);
     if (!response.ok) { setMessage(data.message ?? "요청에 실패했습니다."); return; }
-    setUser(data.user); router.push("/"); router.refresh();
+    setUser(data.user); router.push("/home"); router.refresh();
   }
 
   return <section className="auth-page page">

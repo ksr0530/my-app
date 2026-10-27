@@ -55,16 +55,16 @@ const users = [
 ];
 
 const restaurants = [
-  { restaurantId: "restaurant-001", name: "학생식당 오늘한끼", description: "든든하고 저렴한 학교 앞 한식 백반집", latitude: 37.12345, longitude: 127.12345, avgRating: 4.5 },
-  { restaurantId: "restaurant-002", name: "캠퍼스 김밥", description: "혼밥하기 좋은 분식과 김밥 전문점", latitude: 37.1241, longitude: 127.1242, avgRating: 4.0 },
-  { restaurantId: "restaurant-003", name: "골목 즉석떡볶이", description: "매콤한 떡볶이와 튀김을 함께 즐기는 곳", latitude: 37.1228, longitude: 127.1225, avgRating: 4.5 },
-  { restaurantId: "restaurant-004", name: "소담 국수집", description: "잔치국수와 비빔국수가 인기인 작은 식당", latitude: 37.1252, longitude: 127.1219, avgRating: 4.0 },
-  { restaurantId: "restaurant-005", name: "마루 덮밥", description: "빠르게 먹기 좋은 제육·연어 덮밥 전문점", latitude: 37.126, longitude: 127.1251, avgRating: 4.5 },
-  { restaurantId: "restaurant-006", name: "우리동네 카페", description: "수업 전후 쉬어가기 좋은 조용한 카페", latitude: 37.1218, longitude: 127.1263, avgRating: 4.0 },
-  { restaurantId: "restaurant-007", name: "청춘 치킨", description: "배달메이트와 함께 주문하기 좋은 치킨집", latitude: 37.1271, longitude: 127.1237, avgRating: 4.5 },
-  { restaurantId: "restaurant-008", name: "정든 부대찌개", description: "여럿이 방문하기 좋은 얼큰한 부대찌개", latitude: 37.1209, longitude: 127.1222, avgRating: 4.0 },
-  { restaurantId: "restaurant-009", name: "한입 샐러드", description: "가볍고 건강한 점심을 위한 샐러드 가게", latitude: 37.1247, longitude: 127.127, avgRating: 5.0 },
-  { restaurantId: "restaurant-010", name: "학생회관 석식당", description: "수업 후 든든하게 먹기 좋은 교내 석식 식당", latitude: 37.1232, longitude: 127.1281, avgRating: 4.0 },
+  { restaurantId: "restaurant-001", name: "학생식당 오늘한끼", description: "든든하고 저렴한 학교 앞 한식 백반집", latitude: 37.4889, longitude: 126.7828, avgRating: 4.5 },
+  { restaurantId: "restaurant-002", name: "캠퍼스 김밥", description: "혼밥하기 좋은 분식과 김밥 전문점", latitude: 37.4893, longitude: 126.7838, avgRating: 4.0 },
+  { restaurantId: "restaurant-003", name: "골목 즉석떡볶이", description: "매콤한 떡볶이와 튀김을 함께 즐기는 곳", latitude: 37.4879, longitude: 126.7845, avgRating: 4.5 },
+  { restaurantId: "restaurant-004", name: "소담 국수집", description: "잔치국수와 비빔국수가 인기인 작은 식당", latitude: 37.4876, longitude: 126.7819, avgRating: 4.0 },
+  { restaurantId: "restaurant-005", name: "마루 덮밥", description: "빠르게 먹기 좋은 제육·연어 덮밥 전문점", latitude: 37.4897, longitude: 126.7818, avgRating: 4.5 },
+  { restaurantId: "restaurant-006", name: "우리동네 카페", description: "수업 전후 쉬어가기 좋은 조용한 카페", latitude: 37.4869, longitude: 126.7832, avgRating: 4.0 },
+  { restaurantId: "restaurant-007", name: "청춘 치킨", description: "배달메이트와 함께 주문하기 좋은 치킨집", latitude: 37.4901, longitude: 126.7841, avgRating: 4.5 },
+  { restaurantId: "restaurant-008", name: "정든 부대찌개", description: "여럿이 방문하기 좋은 얼큰한 부대찌개", latitude: 37.4867, longitude: 126.7809, avgRating: 4.0 },
+  { restaurantId: "restaurant-009", name: "한입 샐러드", description: "가볍고 건강한 점심을 위한 샐러드 가게", latitude: 37.4890, longitude: 126.7850, avgRating: 5.0 },
+  { restaurantId: "restaurant-010", name: "학생회관 석식당", description: "수업 후 든든하게 먹기 좋은 교내 석식 식당", latitude: 37.4882, longitude: 126.7854, avgRating: 4.0 },
 ];
 
 const restaurantMeta = {

@@ -19,7 +19,7 @@ export default function RestaurantDetail({ restaurant, reviews }: { restaurant: 
 
   return <section className="page restaurant-detail-page">
     <header className="restaurant-detail-header">
-      <Link href="/" className="back-button" aria-label="홈으로 돌아가기">‹</Link>
+      <Link href="/home" className="back-button" aria-label="홈으로 돌아가기">‹</Link>
       <Image src="/assets/jjeopjjeop-logo.png" alt="쩝쩝대" width={34} height={34} className="restaurant-logo" />
       <span className="restaurant-header-title">식당</span>
     </header>

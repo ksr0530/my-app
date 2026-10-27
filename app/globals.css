@@ -283,3 +283,17 @@ button, input, textarea, select { font: inherit; }
 .community-list-heading select { appearance: none; border: 0; background: transparent; color: inherit; outline: 0; font-size: inherit; font-weight: inherit; }
 .sort-chevron { pointer-events: none; }
 .community-count { margin: 8px 0; color: var(--secondary); font-size: 11px; font-weight: 700; }
+
+/* Final requested refinements */
+.student-verify-card { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; align-items: center; width: 100%; min-height: 84px; margin-top: 16px; border: 1px solid #e2d79a; border-radius: 12px; background: #fff9dc; padding: 15px 16px; color: var(--navy); }
+.student-verify-card-title { display: contents; }
+.student-verify-card-title strong { grid-column: 2; font-size: 14px; font-weight: 900; }
+.student-verify-check { display: flex; width: 24px; height: 24px; align-items: center; justify-content: center; border-radius: 3px; background: #d8d8d8; color: #fff; font-size: 18px; font-weight: 900; }
+.student-verify-card.is-verified .student-verify-check { background: var(--navy); }
+.student-verify-info { grid-column: 3; grid-row: 1; color: var(--secondary); font-size: 15px; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+.student-verify-card p { grid-column: 2 / 4; margin-top: 9px; color: #a7a7a7; font-size: 11px; }
+.detail-actions { display: flex; justify-content: center; margin-top: 12px; }
+.detail-actions button { width: min(100%, 270px); min-height: 44px; }
+.comment-form { align-items: stretch; min-height: 44px; margin-top: 18px; }
+.comment-form input { height: 44px; padding: 0 13px; font-size: 12px; }
+.comment-form button { flex: 0 0 64px; height: 44px; font-size: 11px; }
