@@ -4,24 +4,27 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { CommunityCard } from "../lib/appData";
 
-type Props = { initialPosts: CommunityCard[] };
+const categories = ["전체", "점심", "석식", "배달메이트"];
 
-type SortMode = "latest" | "popular";
+export default function CommunityBoard({ initialPosts }: { initialPosts: CommunityCard[] }) {
+  const [posts, setPosts] = useState(initialPosts);
+  const [category, setCategory] = useState("전체");
+  const [joinedPostId, setJoinedPostId] = useState<string | null>(null);
+  const filteredPosts = useMemo(() => posts.filter((post) => category === "전체" || (category === "배달메이트" ? post.title.includes("배달") || post.description?.includes("배달") : post.title.includes(category) || post.category === category)), [category, posts]);
 
-export default function CommunityBoard({ initialPosts }: Props) {
-  const [keyword, setKeyword] = useState("");
-  const [sort, setSort] = useState<SortMode>("latest");
-  const filteredPosts = useMemo(() => {
-    const normalized = keyword.trim().toLowerCase();
-    const result = initialPosts.filter((post) => !normalized || `${post.title} ${post.author} ${post.description ?? ""}`.toLowerCase().includes(normalized));
-    return [...result].sort((a, b) => sort === "popular" ? (b.currentCount / b.targetCount) - (a.currentCount / a.targetCount) : (b.createdAt ?? "").localeCompare(a.createdAt ?? ""));
-  }, [keyword, sort, initialPosts]);
+  function joinPost(postId: string) {
+    setPosts((current) => current.map((post) => {
+      if (post.postId !== postId || post.isClosed || post.currentCount >= post.targetCount) return post;
+      const currentCount = post.currentCount + 1;
+      return { ...post, currentCount, isClosed: currentCount >= post.targetCount };
+    }));
+    setJoinedPostId(postId);
+  }
 
   return <>
-    <div className="mt-5 flex h-10 items-center gap-2 rounded-[7px] border border-[#1A344F]/20 bg-white/80 px-3"><span className="text-[20px] leading-none text-[#1A344F]/70">⌕</span><input value={keyword} onChange={(event) => setKeyword(event.target.value)} aria-label="커뮤니티 글 검색" className="w-full border-0 bg-transparent p-0 text-[12px] outline-none placeholder:text-[#1A344F]/45" placeholder="커뮤니티 글을 검색해보세요" /></div>
-    <div className="mt-5 flex items-center justify-between"><h2 className="text-[20px] font-black tracking-[-0.07em]">커뮤니티</h2><label className="flex items-center gap-1 text-[11px] font-bold text-[#1A344F]/65"><span className="sr-only">게시글 정렬</span><select value={sort} onChange={(event) => setSort(event.target.value as SortMode)} className="bg-transparent outline-none"><option value="latest">최신순</option><option value="popular">인기순</option></select></label></div>
-    <div className="mt-3 flex items-center justify-between border-b border-[#1A344F]/20 pb-2"><p className="text-[11px] font-bold text-[#1A344F]/60">총 {filteredPosts.length}개의 게시글</p><span className="text-[11px] text-[#1A344F]/50">검색</span></div>
-    <div className="mt-2 space-y-2">{filteredPosts.map((post, index) => { const closed = post.isClosed || post.currentCount >= post.targetCount; return <article key={post.postId} className="rounded-[10px] border border-[#1A344F]/20 bg-white/70 px-3 py-3.5 shadow-sm"><Link href={`/community/${post.postId}`} className="block rounded-[4px] text-left"><div className="flex items-start gap-3"><div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-[8px] text-[22px] ${index % 3 === 0 ? "bg-[#F4C2C1]" : index % 3 === 1 ? "bg-[#F7D878]" : "bg-[#D6DDBB]"}`}>{index % 3 === 0 ? "🍚" : index % 3 === 1 ? "🍱" : "🥗"}</div><div className="min-w-0 flex-1"><div className="flex items-start justify-between gap-2"><h3 className="truncate text-[13px] font-black tracking-[-0.04em] text-[#1A344F]">{post.title}</h3><span className={`shrink-0 rounded-[4px] px-1.5 py-1 text-[10px] font-black ${closed ? "bg-[#1A344F]/10 text-[#1A344F]/50" : "bg-[#F4A9A8] text-[#1A344F]"}`}>{closed ? "모집완료" : `${post.currentCount}/${post.targetCount}`}</span></div><p className="mt-2 truncate text-[11px] leading-4 text-[#1A344F]/60">{post.description ?? "같이 주문하고 밥친구를 찾아요"}</p><p className="mt-1 text-[10px] text-[#1A344F]/45">{post.author} · {post.createdAt ?? "방금 전"}</p></div></div></Link></article>; })}{filteredPosts.length === 0 && <p className="bg-white/60 py-12 text-center text-xs text-[#1A344F]/55">검색된 게시글이 없어요.</p>}</div>
-    <Link href="/community/new" className="fixed bottom-[82px] right-[calc(50%-185px)] z-20 flex h-12 w-12 items-center justify-center rounded-full bg-[#1A344F] text-[28px] font-light leading-none text-[#FEEA9C] shadow-lg" aria-label="게시글 작성">+</Link>
+    <div className="community-filter-row">{categories.map((item) => <button type="button" key={item} onClick={() => setCategory(item)} className={`community-filter-chip ${category === item ? "active" : ""}`}>{item}</button>)}</div>
+    <div className="community-list-heading"><strong>커뮤니티</strong><span>총 {filteredPosts.length}개　 최신순⌄</span></div>
+    <div className="community-card-list">{filteredPosts.map((post, index) => { const closed = post.isClosed || post.currentCount >= post.targetCount; const joined = joinedPostId === post.postId; return <article className="community-post-card" key={post.postId}><Link href={`/community/${post.postId}`} className="community-post-main"><div className={`community-post-icon icon-${index % 3}`}>{index % 3 === 0 ? "🍚" : index % 3 === 1 ? "🍱" : "🥗"}</div><div className="community-post-copy"><div className="community-post-title-row"><h3>{post.title}</h3><span className={closed ? "closed" : "open"}>{closed ? "모집완료" : `${post.currentCount}/${post.targetCount}`}</span></div><p>{post.description ?? "같이 주문하고 밥친구를 찾아요."}</p><small>{post.author} · {post.createdAt ?? "방금 전"}</small></div></Link><button type="button" disabled={closed || joined} onClick={() => joinPost(post.postId)} className="community-join-button">{joined ? "참여완료" : closed ? "모집완료" : "밥친구 참여"}</button></article>; })}{filteredPosts.length === 0 && <p className="community-empty">선택한 카테고리의 글이 없어요.</p>}</div>
+    <Link href="/community/new" className="community-floating-button" aria-label="게시글 작성">+</Link>
   </>;
 }

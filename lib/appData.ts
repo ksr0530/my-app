@@ -74,9 +74,9 @@ export const demoReviews: ReviewCard[] = [
   { reviewId: "review-015", content: "배달메이트를 구해서 배달비를 아꼈어요.", rating: 4, author: "김사랑", restaurantName: "청춘 치킨", createdAt: "2026.10.13" },
 ];
 
-function normalizeRestaurant(row: { restaurantId: string; name: string; description: string | null; avgRating: number | null; latitude: number | null; longitude: number | null; _count?: { reviews: number } }): RestaurantCard {
+function normalizeRestaurant(row: { restaurantId: string; name: string; description: string | null; avgRating: number | null; latitude: number | null; longitude: number | null; category?: string | null; suitableFor?: string | null; _count?: { reviews: number } }): RestaurantCard {
   const fallback = demoRestaurants.find((item) => item.restaurantId === row.restaurantId);
-  return { restaurantId: row.restaurantId, name: row.name, description: row.description ?? "학교 주변 인기 맛집", avgRating: row.avgRating ?? fallback?.avgRating ?? 0, reviewCount: row._count?.reviews ?? fallback?.reviewCount ?? 0, latitude: row.latitude ?? fallback?.latitude ?? null, longitude: row.longitude ?? fallback?.longitude ?? null, category: fallback?.category ?? "기타", suitableFor: fallback?.suitableFor ?? [1, 2, 4] };
+  return { restaurantId: row.restaurantId, name: row.name, description: row.description ?? "학교 주변 인기 맛집", avgRating: row.avgRating ?? fallback?.avgRating ?? 0, reviewCount: row._count?.reviews ?? fallback?.reviewCount ?? 0, latitude: row.latitude ?? fallback?.latitude ?? null, longitude: row.longitude ?? fallback?.longitude ?? null, category: row.category ?? fallback?.category ?? "기타", suitableFor: row.suitableFor?.split(",").map(Number).filter(Boolean) ?? fallback?.suitableFor ?? [1, 2, 4] };
 }
 
 export async function getRestaurants(): Promise<RestaurantCard[]> {

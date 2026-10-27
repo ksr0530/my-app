@@ -5,6 +5,14 @@ const prisma = new PrismaClient();
 
 const users = [
   {
+    id: "demo-user",
+    name: "홍길동",
+    email: "demo@jjupjjupdae.test",
+    password: "demo1234",
+    university: "부천대학교",
+    isStudentVerified: true,
+  },
+  {
     id: "user-sarang",
     name: "김사랑",
     email: "sarang@jjupjjupdae.test",
@@ -59,6 +67,19 @@ const restaurants = [
   { restaurantId: "restaurant-010", name: "학생회관 석식당", description: "수업 후 든든하게 먹기 좋은 교내 석식 식당", latitude: 37.1232, longitude: 127.1281, avgRating: 4.0 },
 ];
 
+const restaurantMeta = {
+  "restaurant-001": { category: "한식", suitableFor: "1,2,4,6" },
+  "restaurant-002": { category: "분식", suitableFor: "1,2" },
+  "restaurant-003": { category: "분식", suitableFor: "2,4,6" },
+  "restaurant-004": { category: "한식", suitableFor: "1,2,4" },
+  "restaurant-005": { category: "한식", suitableFor: "1,2" },
+  "restaurant-006": { category: "기타", suitableFor: "1,2,4" },
+  "restaurant-007": { category: "기타", suitableFor: "2,4,6" },
+  "restaurant-008": { category: "한식", suitableFor: "2,4,6" },
+  "restaurant-009": { category: "기타", suitableFor: "1,2" },
+  "restaurant-010": { category: "한식", suitableFor: "1,2,4,6" },
+};
+
 const reviews = [
   ["review-001", "user-sarang", "restaurant-001", "가격도 착하고 반찬이 깔끔해서 자주 가요.", 5, "2026-10-05"],
   ["review-002", "user-hyemin", "restaurant-001", "점심시간에는 사람이 많지만 회전이 빨라요.", 4, "2026-10-06"],
@@ -87,7 +108,7 @@ const communities = [
 
 async function main() {
   for (const user of users) await prisma.user.upsert({ where: { id: user.id }, update: user, create: user });
-  for (const restaurant of restaurants) await prisma.restaurant.upsert({ where: { restaurantId: restaurant.restaurantId }, update: restaurant, create: restaurant });
+  for (const restaurant of restaurants.map((item) => ({ ...item, ...restaurantMeta[item.restaurantId] }))) await prisma.restaurant.upsert({ where: { restaurantId: restaurant.restaurantId }, update: restaurant, create: restaurant });
   for (const [reviewId, userId, restaurantId, content, rating, createdAt] of reviews) await prisma.review.upsert({ where: { reviewId }, update: { userId, restaurantId, content, rating, createdAt: new Date(createdAt) }, create: { reviewId, userId, restaurantId, content, rating, createdAt: new Date(createdAt) } });
   for (const [postId, userId, title, targetCount, currentCount, isClosed] of communities) await prisma.community.upsert({ where: { postId }, update: { userId, title, targetCount, currentCount, isClosed }, create: { postId, userId, title, targetCount, currentCount, isClosed } });
   console.log(`Seed completed: ${users.length} users, ${restaurants.length} restaurants, ${reviews.length} reviews, ${communities.length} community posts`);

@@ -27,6 +27,8 @@ model Restaurant {
   latitude     Float?                       // 위도
   longitude    Float?                       // 경도
   avgRating    Float?   @default(0.0)       // 평균 별점
+  category     String?  @db.VarChar(20)     // 음식 카테고리
+  suitableFor  String?  @db.VarChar(40)     // 추천 인원수: 1,2,4,6
   reviews      Review[]                     // 이 식당에 달린 리뷰 목록
 }
 
