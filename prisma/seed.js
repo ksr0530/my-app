@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
@@ -46,86 +47,16 @@ const users = [
 ];
 
 const restaurants = [
-  {
-    restaurantId: "restaurant-001",
-    name: "학생식당 오늘한끼",
-    description: "든든하고 저렴한 학교 앞 한식 백반집",
-    latitude: 37.12345,
-    longitude: 127.12345,
-    avgRating: 4.6,
-  },
-  {
-    restaurantId: "restaurant-002",
-    name: "캠퍼스 김밥",
-    description: "혼밥하기 좋은 분식과 김밥 전문점",
-    latitude: 37.1241,
-    longitude: 127.1242,
-    avgRating: 4.2,
-  },
-  {
-    restaurantId: "restaurant-003",
-    name: "골목 즉석떡볶이",
-    description: "매콤한 떡볶이와 튀김을 함께 즐기는 곳",
-    latitude: 37.1228,
-    longitude: 127.1225,
-    avgRating: 4.4,
-  },
-  {
-    restaurantId: "restaurant-004",
-    name: "소담 국수집",
-    description: "잔치국수와 비빔국수가 인기인 작은 식당",
-    latitude: 37.1252,
-    longitude: 127.1219,
-    avgRating: 4.0,
-  },
-  {
-    restaurantId: "restaurant-005",
-    name: "마루 덮밥",
-    description: "빠르게 먹기 좋은 제육·연어 덮밥 전문점",
-    latitude: 37.126,
-    longitude: 127.1251,
-    avgRating: 4.7,
-  },
-  {
-    restaurantId: "restaurant-006",
-    name: "우리동네 카페",
-    description: "수업 전후 쉬어가기 좋은 조용한 카페",
-    latitude: 37.1218,
-    longitude: 127.1263,
-    avgRating: 4.3,
-  },
-  {
-    restaurantId: "restaurant-007",
-    name: "청춘 치킨",
-    description: "배달메이트와 함께 주문하기 좋은 치킨집",
-    latitude: 37.1271,
-    longitude: 127.1237,
-    avgRating: 4.5,
-  },
-  {
-    restaurantId: "restaurant-008",
-    name: "정든 부대찌개",
-    description: "여럿이 방문하기 좋은 얼큰한 부대찌개",
-    latitude: 37.1209,
-    longitude: 127.1222,
-    avgRating: 4.1,
-  },
-  {
-    restaurantId: "restaurant-009",
-    name: "한입 샐러드",
-    description: "가볍고 건강한 점심을 위한 샐러드 가게",
-    latitude: 37.1247,
-    longitude: 127.127,
-    avgRating: 4.5,
-  },
-  {
-    restaurantId: "restaurant-010",
-    name: "학생회관 석식당",
-    description: "수업 후 든든하게 먹기 좋은 교내 석식 식당",
-    latitude: 37.1232,
-    longitude: 127.1281,
-    avgRating: 3.9,
-  },
+  { restaurantId: "restaurant-001", name: "학생식당 오늘한끼", description: "든든하고 저렴한 학교 앞 한식 백반집", latitude: 37.12345, longitude: 127.12345, avgRating: 4.5 },
+  { restaurantId: "restaurant-002", name: "캠퍼스 김밥", description: "혼밥하기 좋은 분식과 김밥 전문점", latitude: 37.1241, longitude: 127.1242, avgRating: 4.0 },
+  { restaurantId: "restaurant-003", name: "골목 즉석떡볶이", description: "매콤한 떡볶이와 튀김을 함께 즐기는 곳", latitude: 37.1228, longitude: 127.1225, avgRating: 4.5 },
+  { restaurantId: "restaurant-004", name: "소담 국수집", description: "잔치국수와 비빔국수가 인기인 작은 식당", latitude: 37.1252, longitude: 127.1219, avgRating: 4.0 },
+  { restaurantId: "restaurant-005", name: "마루 덮밥", description: "빠르게 먹기 좋은 제육·연어 덮밥 전문점", latitude: 37.126, longitude: 127.1251, avgRating: 4.5 },
+  { restaurantId: "restaurant-006", name: "우리동네 카페", description: "수업 전후 쉬어가기 좋은 조용한 카페", latitude: 37.1218, longitude: 127.1263, avgRating: 4.0 },
+  { restaurantId: "restaurant-007", name: "청춘 치킨", description: "배달메이트와 함께 주문하기 좋은 치킨집", latitude: 37.1271, longitude: 127.1237, avgRating: 4.5 },
+  { restaurantId: "restaurant-008", name: "정든 부대찌개", description: "여럿이 방문하기 좋은 얼큰한 부대찌개", latitude: 37.1209, longitude: 127.1222, avgRating: 4.0 },
+  { restaurantId: "restaurant-009", name: "한입 샐러드", description: "가볍고 건강한 점심을 위한 샐러드 가게", latitude: 37.1247, longitude: 127.127, avgRating: 5.0 },
+  { restaurantId: "restaurant-010", name: "학생회관 석식당", description: "수업 후 든든하게 먹기 좋은 교내 석식 식당", latitude: 37.1232, longitude: 127.1281, avgRating: 4.0 },
 ];
 
 const reviews = [
@@ -136,7 +67,7 @@ const reviews = [
   ["review-005", "user-junho", "restaurant-003", "맵기는 하지만 튀김과 같이 먹으면 딱 좋아요.", 5, "2026-10-08"],
   ["review-006", "user-sarang", "restaurant-004", "국물이 깔끔하고 양이 넉넉합니다.", 4, "2026-10-09"],
   ["review-007", "user-hyemin", "restaurant-005", "제육덮밥 양이 많아서 든든하게 먹었어요.", 5, "2026-10-09"],
-  ["review-008", "user-minjun", "restaurant-005", "키오스크 주문이라 점심에도 편합니다.", 5, "2026-10-10"],
+  ["review-008", "user-minjun", "restaurant-005", "키오스크 주문이라 점심에도 편합니다.", 4, "2026-10-10"],
   ["review-009", "user-seoyeon", "restaurant-006", "콘센트가 많고 조용해서 공부하기 좋아요.", 4, "2026-10-10"],
   ["review-010", "user-junho", "restaurant-007", "치킨이 바삭하고 배달이 빨랐어요.", 5, "2026-10-11"],
   ["review-011", "user-sarang", "restaurant-008", "여럿이 먹기 좋고 사리가 다양해요.", 4, "2026-10-11"],
@@ -155,44 +86,11 @@ const communities = [
 ];
 
 async function main() {
-  for (const user of users) {
-    await prisma.user.upsert({ where: { id: user.id }, update: user, create: user });
-  }
-
-  for (const restaurant of restaurants) {
-    await prisma.restaurant.upsert({
-      where: { restaurantId: restaurant.restaurantId },
-      update: restaurant,
-      create: restaurant,
-    });
-  }
-
-  for (const [reviewId, userId, restaurantId, content, rating, createdAt] of reviews) {
-    await prisma.review.upsert({
-      where: { reviewId },
-      update: { userId, restaurantId, content, rating, createdAt: new Date(createdAt) },
-      create: { reviewId, userId, restaurantId, content, rating, createdAt: new Date(createdAt) },
-    });
-  }
-
-  for (const [postId, userId, title, targetCount, currentCount, isClosed] of communities) {
-    await prisma.community.upsert({
-      where: { postId },
-      update: { userId, title, targetCount, currentCount, isClosed },
-      create: { postId, userId, title, targetCount, currentCount, isClosed },
-    });
-  }
-
-  console.log(
-    `Seed completed: ${users.length} users, ${restaurants.length} restaurants, ${reviews.length} reviews, ${communities.length} community posts`,
-  );
+  for (const user of users) await prisma.user.upsert({ where: { id: user.id }, update: user, create: user });
+  for (const restaurant of restaurants) await prisma.restaurant.upsert({ where: { restaurantId: restaurant.restaurantId }, update: restaurant, create: restaurant });
+  for (const [reviewId, userId, restaurantId, content, rating, createdAt] of reviews) await prisma.review.upsert({ where: { reviewId }, update: { userId, restaurantId, content, rating, createdAt: new Date(createdAt) }, create: { reviewId, userId, restaurantId, content, rating, createdAt: new Date(createdAt) } });
+  for (const [postId, userId, title, targetCount, currentCount, isClosed] of communities) await prisma.community.upsert({ where: { postId }, update: { userId, title, targetCount, currentCount, isClosed }, create: { postId, userId, title, targetCount, currentCount, isClosed } });
+  console.log(`Seed completed: ${users.length} users, ${restaurants.length} restaurants, ${reviews.length} reviews, ${communities.length} community posts`);
 }
 
-main()
-  .catch((error) => {
-    console.error("Seed failed:", error);
-    process.exitCode = 1;
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+main().catch((error) => { console.error("Seed failed:", error); process.exitCode = 1; }).finally(async () => { await prisma.$disconnect(); });
