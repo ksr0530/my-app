@@ -68,7 +68,6 @@ export default function RestaurantDetail({ restaurant, reviews }: { restaurant: 
         <div className="ai-summary-score"><strong>{average.toFixed(1)}</strong><Stars rating={average} /><span>리뷰 {reviewCount}개 기준</span></div>
         <div className="summary-highlight"><span>가장 많이 언급된 내용</span><strong>가격이 합리적이고 혼밥하기 좋아요</strong></div>
         <ul><li>가격 대비 만족도가 높다는 의견이 많아요.</li><li>점심시간에는 방문자가 많지만 회전이 빠른 편이에요.</li></ul>
-        <p className="summary-note">리뷰 내용을 바탕으로 정리한 발표용 요약입니다.</p>
       </div>
     </div>}
   </section>;
