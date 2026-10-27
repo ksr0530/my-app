@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "reset": "npx prisma db push --force-reset && npm run db:seed && npm run dev"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
