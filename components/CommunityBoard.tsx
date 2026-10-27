@@ -8,6 +8,11 @@ const categories = ["전체", "한식", "분식", "일식", "중식", "디저트
 type SortMode = "latest" | "popular";
 const STORAGE_KEY = "jjeopjjeop-community-posts";
 
+function cleanSavedPosts(value: unknown): CommunityCard[] {
+  if (!Array.isArray(value)) return [];
+  return value.filter((post): post is CommunityCard => Boolean(post && typeof post === "object" && "postId" in post && String((post as CommunityCard).title ?? "").trim().toLowerCase() !== "dd"));
+}
+
 export default function CommunityBoard({ initialPosts }: { initialPosts: CommunityCard[] }) {
   const [posts, setPosts] = useState(initialPosts);
   const [category, setCategory] = useState("전체");
@@ -16,8 +21,9 @@ export default function CommunityBoard({ initialPosts }: { initialPosts: Communi
   useEffect(() => {
     let cancelled = false;
     try {
-      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "[]") as CommunityCard[];
-      if (Array.isArray(saved) && saved.length) {
+      const saved = cleanSavedPosts(JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "[]"));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+      if (saved.length) {
         window.setTimeout(() => {
           if (!cancelled) setPosts([...saved, ...initialPosts.filter((post) => !saved.some((item) => item.postId === post.postId))]);
         }, 0);
@@ -29,8 +35,9 @@ export default function CommunityBoard({ initialPosts }: { initialPosts: Communi
   useEffect(() => {
     function refresh() {
       try {
-        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "[]") as CommunityCard[];
-        if (Array.isArray(saved)) setPosts([...saved, ...initialPosts.filter((post) => !saved.some((item) => item.postId === post.postId))]);
+        const saved = cleanSavedPosts(JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "[]"));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+        setPosts([...saved, ...initialPosts.filter((post) => !saved.some((item) => item.postId === post.postId))]);
       } catch { /* ignore */ }
     }
     window.addEventListener("jjeopjjeop:community-updated", refresh);

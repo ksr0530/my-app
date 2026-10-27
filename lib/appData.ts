@@ -57,8 +57,6 @@ export const demoCommunities: CommunityCard[] = [
 ];
 
 export const demoReviews: ReviewCard[] = [
-  { reviewId: "review-001", content: "가격도 착하고 반찬이 깔끔해서 자주 가요. 점심시간에는 사람이 많지만 회전이 빨라서 생각보다 오래 기다리지는 않았어요.", rating: 5, author: "김사랑", restaurantName: "학생식당 오늘한끼", createdAt: "2026.10.05" },
-  { reviewId: "review-002", content: "메뉴가 매일 조금씩 달라져서 좋아요. 혼자 먹기에도 부담 없는 분위기입니다.", rating: 4, author: "이혜민", restaurantName: "학생식당 오늘한끼", createdAt: "2026.10.06" },
   { reviewId: "review-003", content: "김밥이 든든하고 혼자 먹기 편합니다.", rating: 4, author: "박민준", restaurantName: "캠퍼스 김밥", createdAt: "2026.10.07" },
   { reviewId: "review-004", content: "참치김밥이 맛있어요. 포장도 빨라요.", rating: 4, author: "최서연", restaurantName: "캠퍼스 김밥", createdAt: "2026.10.08" },
   { reviewId: "review-005", content: "맵기는 하지만 튀김과 같이 먹으면 딱 좋아요.", rating: 5, author: "정준호", restaurantName: "골목 즉석떡볶이", createdAt: "2026.10.08" },
@@ -129,5 +127,5 @@ export async function getReviewsForRestaurant(restaurantId: string, restaurantNa
     const rows = await prisma.review.findMany({ where: { restaurantId }, include: { user: true, restaurant: true }, orderBy: { createdAt: "desc" } });
     if (rows.length) return rows.map((row) => ({ reviewId: row.reviewId, content: row.content, rating: row.rating, author: row.user.name, restaurantName: row.restaurant.name, createdAt: row.createdAt.toISOString().slice(0, 10) }));
   } catch { /* fallback */ }
-  return demoReviews.filter((review) => review.restaurantName === restaurantName || (restaurantId === "restaurant-001" && review.restaurantName === "학생식당 오늘한끼"));
+  return demoReviews.filter((review) => review.restaurantName === restaurantName);
 }

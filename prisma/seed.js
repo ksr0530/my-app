@@ -81,8 +81,6 @@ const restaurantMeta = {
 };
 
 const reviews = [
-  ["review-001", "user-sarang", "restaurant-001", "가격도 착하고 반찬이 깔끔해서 자주 가요.", 5, "2026-10-05"],
-  ["review-002", "user-hyemin", "restaurant-001", "점심시간에는 사람이 많지만 회전이 빨라요.", 4, "2026-10-06"],
   ["review-003", "user-minjun", "restaurant-002", "김밥이 든든하고 혼자 먹기 편합니다.", 4, "2026-10-07"],
   ["review-004", "user-seoyeon", "restaurant-002", "참치김밥이 맛있어요. 포장도 빨라요.", 4, "2026-10-08"],
   ["review-005", "user-junho", "restaurant-003", "맵기는 하지만 튀김과 같이 먹으면 딱 좋아요.", 5, "2026-10-08"],
@@ -107,6 +105,8 @@ const communities = [
 ];
 
 async function main() {
+  await prisma.review.deleteMany({ where: { restaurantId: "restaurant-001" } });
+  await prisma.community.deleteMany({ where: { title: "dd" } });
   for (const user of users) await prisma.user.upsert({ where: { id: user.id }, update: user, create: user });
   for (const restaurant of restaurants.map((item) => ({ ...item, ...restaurantMeta[item.restaurantId] }))) await prisma.restaurant.upsert({ where: { restaurantId: restaurant.restaurantId }, update: restaurant, create: restaurant });
   for (const [reviewId, userId, restaurantId, content, rating, createdAt] of reviews) await prisma.review.upsert({ where: { reviewId }, update: { userId, restaurantId, content, rating, createdAt: new Date(createdAt) }, create: { reviewId, userId, restaurantId, content, rating, createdAt: new Date(createdAt) } });
