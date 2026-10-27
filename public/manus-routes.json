@@ -1,0 +1,1 @@
+{"routes":[{"path":"/","title":"홈"},{"path":"/community","title":"커뮤니티"},{"path":"/community/new","title":"커뮤니티 글 작성"},{"path":"/community/:postId","title":"커뮤니티 게시글 상세"},{"path":"/map","title":"지도"},{"path":"/mypage","title":"마이페이지"}]}

@@ -10,6 +10,8 @@ export type RestaurantCard = {
 export type CommunityCard = {
   postId: string;
   title: string;
+  description?: string;
+  category?: string;
   currentCount: number;
   targetCount: number;
   isClosed: boolean;
@@ -36,10 +38,10 @@ export const demoRestaurants: RestaurantCard[] = [
 ];
 
 export const demoCommunities: CommunityCard[] = [
-  { postId: "post-001", title: "오늘 점심 청춘 치킨 같이 시켜요!", currentCount: 2, targetCount: 4, isClosed: false, author: "김사랑" },
-  { postId: "post-002", title: "마루 덮밥 배달메이트 구합니다", currentCount: 1, targetCount: 3, isClosed: false, author: "이혜민" },
-  { postId: "post-003", title: "오늘 저녁 정든 부대찌개 드실 분", currentCount: 3, targetCount: 5, isClosed: false, author: "박민준" },
-  { postId: "post-004", title: "최소주문금액 맞춰서 같이 주문해요", currentCount: 4, targetCount: 4, isClosed: true, author: "최서연" },
+  { postId: "post-001", title: "오늘 점심 청춘 치킨 같이 시켜요!", description: "최소주문금액을 맞춰서 같이 주문할 밥친구를 모집해요.", category: "치킨", currentCount: 2, targetCount: 4, isClosed: false, author: "김사랑" },
+  { postId: "post-002", title: "마루 덮밥 배달메이트 구합니다", description: "오늘 마루 덮밥 같이 주문하고 학교에서 받아요.", category: "한식", currentCount: 1, targetCount: 3, isClosed: false, author: "이혜민" },
+  { postId: "post-003", title: "오늘 저녁 정든 부대찌개 드실 분", description: "저녁 6시에 정든 부대찌개 함께 드실 분을 찾아요.", category: "한식", currentCount: 3, targetCount: 5, isClosed: false, author: "박민준" },
+  { postId: "post-004", title: "최소주문금액 맞춰서 같이 주문해요", description: "배달비와 최소주문금액을 아끼고 싶은 분들을 모집했어요.", category: "배달", currentCount: 4, targetCount: 4, isClosed: true, author: "최서연" },
 ];
 
 export const demoReviews: ReviewCard[] = [
@@ -61,7 +63,16 @@ export async function getRestaurants(): Promise<RestaurantCard[]> {
 export async function getCommunities(): Promise<CommunityCard[]> {
   try {
     const rows = await prisma.community.findMany({ include: { user: true }, orderBy: { postId: "asc" } });
-    if (rows.length) return rows.map((row) => ({ postId: row.postId, title: row.title, currentCount: row.currentCount, targetCount: row.targetCount, isClosed: row.isClosed, author: row.user.name }));
+    if (rows.length) return rows.map((row) => ({
+      postId: row.postId,
+      title: row.title,
+      currentCount: row.currentCount,
+      targetCount: row.targetCount,
+      isClosed: row.isClosed,
+      author: row.user.name,
+      description: "같이 주문하고 밥친구를 찾아요.",
+      category: row.title.includes("배달") ? "배달" : "한식",
+    }));
   } catch {
     // 발표용 fallback 데이터를 사용합니다.
   }
