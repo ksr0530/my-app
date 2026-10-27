@@ -14,7 +14,8 @@ export default function RestaurantDetail({ restaurant, reviews }: { restaurant: 
   const [expandedReviews, setExpandedReviews] = useState<Record<string, boolean>>({});
 
   const toggleReview = (reviewId: string) => setExpandedReviews((current) => ({ ...current, [reviewId]: !current[reviewId] }));
-  const average = reviews.length ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length : restaurant.avgRating;
+  const average = restaurant.avgRating;
+  const reviewCount = restaurant.reviewCount;
 
   return <section className="page restaurant-detail-page">
     <header className="restaurant-detail-header">
@@ -29,7 +30,7 @@ export default function RestaurantDetail({ restaurant, reviews }: { restaurant: 
           <h1>{restaurant.name}</h1>
           <p>{restaurant.description}</p>
         </div>
-        <div className="restaurant-score"><Stars rating={average} /><strong>{average.toFixed(1)}</strong><span>({reviews.length || 12})</span></div>
+        <div className="restaurant-score"><Stars rating={average} /><strong>{average.toFixed(1)}</strong><span>({reviewCount})</span></div>
       </section>
 
       <div className="restaurant-photo-placeholder" aria-label="식당 사진 자리"><span>식당 사진</span><small>추후 이미지 파일을 이 영역에 넣을 수 있어요.</small></div>
@@ -40,7 +41,7 @@ export default function RestaurantDetail({ restaurant, reviews }: { restaurant: 
       </section>
 
       <section className="reviews-section">
-        <div className="reviews-heading"><h2>리뷰</h2><span>★ {average.toFixed(1)}({reviews.length || 12})</span></div>
+        <div className="reviews-heading"><h2>리뷰</h2><span>★ {average.toFixed(1)}({reviewCount})</span></div>
         <div className="review-list">
           {reviews.length ? reviews.map((review) => {
             const expanded = Boolean(expandedReviews[review.reviewId]);
@@ -63,11 +64,11 @@ export default function RestaurantDetail({ restaurant, reviews }: { restaurant: 
     {summaryOpen && <div className="popup-backdrop" role="presentation" onClick={() => setSummaryOpen(false)}>
       <div className="ai-summary-popup" role="dialog" aria-modal="true" aria-labelledby="ai-summary-title" onClick={(event) => event.stopPropagation()}>
         <button type="button" className="popup-close" onClick={() => setSummaryOpen(false)} aria-label="팝업 닫기">×</button>
-        <div className="ai-popup-badge">✦</div>
-        <h2 id="ai-summary-title">AI 리뷰 요약 팝업</h2>
-        <div className="summary-chips"><span>가격이 합리적</span><span>혼밥하기 좋아요</span></div>
-        <ul><li>리뷰 요약 1: {restaurant.name}은 가격 대비 만족도가 높다는 의견이 많아요.</li><li>리뷰 요약 2: 점심시간에는 방문자가 많지만 회전이 빠른 편이에요.</li></ul>
-        <p className="summary-note">현재는 발표용 요약 문구이며, 추후 AI API와 연결할 수 있어요.</p>
+        <div className="ai-popup-heading"><div className="ai-popup-badge">✦</div><div><p>쩝쩝대 AI</p><h2 id="ai-summary-title">리뷰를 한눈에 요약했어요</h2></div></div>
+        <div className="ai-summary-score"><strong>{average.toFixed(1)}</strong><Stars rating={average} /><span>리뷰 {reviewCount}개 기준</span></div>
+        <div className="summary-highlight"><span>가장 많이 언급된 내용</span><strong>가격이 합리적이고 혼밥하기 좋아요</strong></div>
+        <ul><li>가격 대비 만족도가 높다는 의견이 많아요.</li><li>점심시간에는 방문자가 많지만 회전이 빠른 편이에요.</li></ul>
+        <p className="summary-note">리뷰 내용을 바탕으로 정리한 발표용 요약입니다.</p>
       </div>
     </div>}
   </section>;
