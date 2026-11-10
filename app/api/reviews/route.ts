@@ -8,6 +8,8 @@ export async function POST(request: Request) {
     const user = await prisma.user.findUnique({ where: { id: body.userId } });
     if (!user) return NextResponse.json({ message: "로그인이 필요합니다." }, { status: 401 });
     if (!user.isStudentVerified) return NextResponse.json({ message: "재학생 인증 후 리뷰를 작성할 수 있습니다." }, { status: 403 });
+    const restaurant = await prisma.restaurant.findUnique({ where: { restaurantId: body.restaurantId } });
+    if (!restaurant) return NextResponse.json({ message: "식당 정보를 찾을 수 없습니다." }, { status: 404 });
     const review = await prisma.review.create({ data: { reviewId: `review-${Date.now()}`, userId: body.userId, restaurantId: body.restaurantId, content: body.content.trim(), rating: body.rating } });
     const aggregate = await prisma.review.aggregate({ where: { restaurantId: body.restaurantId }, _avg: { rating: true } });
     await prisma.restaurant.update({ where: { restaurantId: body.restaurantId }, data: { avgRating: aggregate._avg.rating ?? 0 } });

@@ -51,11 +51,11 @@ export const demoRestaurants: RestaurantCard[] = [
 ];
 
 export const demoCommunities: CommunityCard[] = [
-  { postId: "post-001", title: "오늘 점심 청춘 치킨 같이 시켜요!", description: "최소주문금액을 맞춰서 같이 주문할 밥친구를 모집해요.", category: "기타", currentCount: 2, targetCount: 4, isClosed: false, author: "김사랑", createdAt: "2026-10-26" },
-  { postId: "post-002", title: "마루 덮밥 배달메이트 구합니다", description: "오늘 마루 덮밥 같이 주문하고 학교에서 받아요.", category: "한식", currentCount: 1, targetCount: 3, isClosed: false, author: "이혜민", createdAt: "2026-10-25" },
-  { postId: "post-003", title: "오늘 저녁 정든 부대찌개 드실 분", description: "저녁 6시에 정든 부대찌개 함께 드실 분을 찾아요.", category: "한식", currentCount: 3, targetCount: 5, isClosed: false, author: "박민준", createdAt: "2026-10-24" },
-  { postId: "post-004", title: "최소주문금액 맞춰서 같이 주문해요", description: "배달비와 최소주문금액을 아끼고 싶은 분들을 모집했어요.", category: "기타", currentCount: 4, targetCount: 4, isClosed: true, author: "최서연", createdAt: "2026-10-23" },
-  { postId: "post-005", title: "오늘 저녁 학생회관 석식 같이 먹을 사람", description: "수업 끝나고 학생회관에서 같이 먹어요.", category: "한식", currentCount: 2, targetCount: 4, isClosed: false, author: "정준호", createdAt: "2026-10-22" },
+  { postId: "post-001", userId: "user-sarang", title: "오늘 점심 청춘 치킨 같이 시켜요!", description: "최소주문금액을 맞춰서 같이 주문할 밥친구를 모집해요.", category: "기타", currentCount: 2, targetCount: 4, isClosed: false, author: "김사랑", createdAt: "2026-10-26" },
+  { postId: "post-002", userId: "user-hyemin", title: "마루 덮밥 배달메이트 구합니다", description: "오늘 마루 덮밥 같이 주문하고 학교에서 받아요.", category: "한식", currentCount: 1, targetCount: 3, isClosed: false, author: "이혜민", createdAt: "2026-10-25" },
+  { postId: "post-003", userId: "user-minjun", title: "오늘 저녁 정든 부대찌개 드실 분", description: "저녁 6시에 정든 부대찌개 함께 드실 분을 찾아요.", category: "한식", currentCount: 3, targetCount: 5, isClosed: false, author: "박민준", createdAt: "2026-10-24" },
+  { postId: "post-004", userId: "user-seoyeon", title: "최소주문금액 맞춰서 같이 주문해요", description: "배달비와 최소주문금액을 아끼고 싶은 분들을 모집했어요.", category: "기타", currentCount: 4, targetCount: 4, isClosed: true, author: "최서연", createdAt: "2026-10-23" },
+  { postId: "post-005", userId: "user-junho", title: "오늘 저녁 학생회관 석식 같이 먹을 사람", description: "수업 끝나고 학생회관에서 같이 먹어요.", category: "한식", currentCount: 2, targetCount: 4, isClosed: false, author: "정준호", createdAt: "2026-10-22" },
 ];
 
 export const demoReviews: ReviewCard[] = [

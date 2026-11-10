@@ -52,6 +52,9 @@ const users = [
     university: "우리대학교",
     isStudentVerified: true,
   },
+  { id: "demo-owner", name: "청춘치킨 사장님", email: "owner@jjupjjupdae.test", password: "demo1234", university: "사업자", role: "OWNER", ownerApprovalStatus: "APPROVED" },
+  { id: "owner-pending", name: "캠퍼스김밥 사장님", email: "pending-owner@jjupjjupdae.test", password: "demo1234", university: "사업자", role: "OWNER", ownerApprovalStatus: "PENDING" },
+  { id: "owner-rejected", name: "마루덮밥 사장님", email: "rejected-owner@jjupjjupdae.test", password: "demo1234", university: "사업자", role: "OWNER", ownerApprovalStatus: "REJECTED" },
 ];
 
 const restaurants = [
@@ -96,6 +99,16 @@ const reviews = [
   ["review-015", "user-sarang", "restaurant-007", "배달메이트를 구해서 배달비를 아꼈어요.", 4, "2026-10-13"],
 ];
 
+const reportExamples = [
+  { reportId: "report-demo-post", reporterId: "demo-user", targetType: "COMMUNITY", postId: "post-001", reason: "광고·홍보성 글", detail: "게시글에 광고성 내용이 포함되어 있어요.", status: "PENDING" },
+  { reportId: "report-demo-review", reporterId: "user-sarang", targetType: "REVIEW", reviewId: "review-003", reason: "부적절한 내용", detail: "리뷰 내용을 확인해주세요.", status: "PENDING" },
+  { reportId: "report-demo-done", reporterId: "user-hyemin", targetType: "COMMUNITY", postId: "post-003", reason: "욕설·비방", detail: "처리 완료된 예시 신고입니다.", status: "RESOLVED", action: "주의 안내만 전송", processedAt: new Date("2026-10-25") },
+];
+const ownerApplications = [
+  { applicationId: "owner-application-pending", userId: "owner-pending", restaurantName: "캠퍼스 김밥", businessNumber: "123-45-67890", reason: "식당 사장님 가입 승인 요청", status: "PENDING" },
+  { applicationId: "owner-application-approved", userId: "demo-owner", restaurantName: "청춘 치킨", businessNumber: "234-56-78901", reason: "승인 완료 예시", status: "APPROVED", reviewedAt: new Date("2026-10-26") },
+  { applicationId: "owner-application-rejected", userId: "owner-rejected", restaurantName: "마루 덮밥", businessNumber: "345-67-89012", reason: "사업자 정보 재확인이 필요합니다.", status: "REJECTED", rejectReason: "사업자등록증을 다시 확인해주세요.", reviewedAt: new Date("2026-10-26") },
+];
 const communities = [
   ["post-001", "user-sarang", "오늘 점심 청춘 치킨 같이 시켜요!", 4, 2, false],
   ["post-002", "user-hyemin", "마루 덮밥 배달메이트 구합니다", 3, 1, false],
@@ -111,6 +124,9 @@ async function main() {
   for (const restaurant of restaurants.map((item) => ({ ...item, ...restaurantMeta[item.restaurantId] }))) await prisma.restaurant.upsert({ where: { restaurantId: restaurant.restaurantId }, update: restaurant, create: restaurant });
   for (const [reviewId, userId, restaurantId, content, rating, createdAt] of reviews) await prisma.review.upsert({ where: { reviewId }, update: { userId, restaurantId, content, rating, createdAt: new Date(createdAt) }, create: { reviewId, userId, restaurantId, content, rating, createdAt: new Date(createdAt) } });
   for (const [postId, userId, title, targetCount, currentCount, isClosed] of communities) await prisma.community.upsert({ where: { postId }, update: { userId, title, targetCount, currentCount, isClosed }, create: { postId, userId, title, targetCount, currentCount, isClosed } });
+  for (const report of reportExamples) await prisma.report.upsert({ where: { reportId: report.reportId }, update: report, create: report });
+  for (const application of ownerApplications) await prisma.ownerApplication.upsert({ where: { applicationId: application.applicationId }, update: application, create: application });
+  await prisma.restaurant.update({ where: { restaurantId: "restaurant-007" }, data: { ownerId: "demo-owner" } });
   console.log(`Seed completed: ${users.length} users, ${restaurants.length} restaurants, ${reviews.length} reviews, ${communities.length} community posts`);
 }
 

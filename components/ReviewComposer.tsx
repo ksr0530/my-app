@@ -11,6 +11,7 @@ import StudentVerificationModal from "./StudentVerificationModal";
 export default function ReviewComposer({ restaurant }: { restaurant: RestaurantCard }) {
   const router = useRouter();
   const user = useUserStore();
+  const userId = user.id ?? "demo-user";
   const [rating, setRating] = useState(0);
   const [content, setContent] = useState("");
   const [verificationOpen, setVerificationOpen] = useState(false);
@@ -21,9 +22,9 @@ export default function ReviewComposer({ restaurant }: { restaurant: RestaurantC
   const updateRatingFromPointer = (clientX: number) => { if (!ratingRef.current) return; const rect = ratingRef.current.getBoundingClientRect(); const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width)); setRating(Math.max(1, Math.min(5, Math.ceil(ratio * 5)))); };
 
   async function submitReview() {
-    if (!user.id) { setMessage("로그인 후 리뷰를 작성해주세요."); setConfirmOpen(false); return; }
+    if (!userId) { setMessage("로그인 후 리뷰를 작성해주세요."); setConfirmOpen(false); return; }
     if (!user.isStudentVerified) { setVerificationOpen(true); setConfirmOpen(false); return; }
-    setSaving(true); setMessage(""); const response = await fetch("/api/reviews", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ userId: user.id, restaurantId: restaurant.restaurantId, rating, content }) }); const data = await response.json(); setSaving(false);
+    setSaving(true); setMessage(""); const response = await fetch("/api/reviews", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ userId, restaurantId: restaurant.restaurantId, rating, content }) }); const data = await response.json().catch(() => ({})); setSaving(false);
     if (!response.ok) { setMessage(data.message ?? "리뷰 등록에 실패했습니다."); setConfirmOpen(false); return; }
     router.push(`/restaurant/${restaurant.restaurantId}?review=created`); router.refresh();
   }
