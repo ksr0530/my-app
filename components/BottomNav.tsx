@@ -21,9 +21,9 @@ const ownerItems: NavItem[] = [
 ];
 
 const adminItems: NavItem[] = [
-  { href: "/admin/reports", label: "신고 관리", icon: "/assets/checkbox.svg" },
-  { href: "/community", label: "커뮤니티", icon: "/assets/community.svg" },
+  { href: "/admin/reports", label: "신고관리", icon: "/assets/report.svg" },
   { href: "/admin/support", label: "사장님 상담", icon: "/assets/person.svg" },
+  { href: "/mypage", label: "마이페이지", icon: "/assets/mypage.svg" },
 ];
 
 export default function BottomNav() {

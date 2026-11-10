@@ -110,6 +110,7 @@ model Community {
   userId       String    @db.VarChar(50)
   title        String    @db.VarChar(255)
   content      String?   @db.Text
+  category     String?   @db.VarChar(20)
   targetCount  Int
   currentCount Int       @default(1)
   isClosed     Boolean   @default(false)
