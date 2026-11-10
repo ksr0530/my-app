@@ -346,3 +346,4 @@ button, input, textarea, select { font: inherit; }
 .bottom-nav-admin a[data-active="true"],.bottom-nav-owner a[data-active="true"]{color:var(--yellow);font-weight:900}
 .bottom-nav-admin img,.bottom-nav-owner img{filter:brightness(0) invert(1);opacity:.85}
 .bottom-nav-admin a[data-active="true"] img,.bottom-nav-owner a[data-active="true"] img{opacity:1}
+.report-trigger img{width:15px;height:15px;object-fit:contain}.bottom-nav-admin .admin-nav-icon,.bottom-nav-owner .owner-nav-icon{filter:brightness(0) invert(1)}
