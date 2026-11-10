@@ -5,6 +5,6 @@ import BottomNav from "./BottomNav";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const hideNavigation = pathname === "/login" || pathname === "/signup";
+  const hideNavigation = pathname === "/login" || pathname === "/signup" || pathname.startsWith("/owner");
   return <div className="mobile-shell"><main>{children}</main>{!hideNavigation && <BottomNav />}</div>;
 }
