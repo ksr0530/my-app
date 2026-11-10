@@ -1,0 +1,2 @@
+import { NextResponse } from "next/server"; import { prisma } from "../../../../../lib/prisma";
+export async function PATCH(request:Request,{params}:{params:Promise<{reportId:string}>}){const {reportId}=await params;const body=await request.json();const row=await prisma.report.update({where:{reportId},data:{status:body.status,action:body.action,processedAt:new Date()}});return NextResponse.json(row)}

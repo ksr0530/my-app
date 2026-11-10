@@ -9,7 +9,7 @@ import { useUserStore } from "../store/userStore";
 export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const router = useRouter();
   const setUser = useUserStore((state) => state.setUser);
-  const [form, setForm] = useState({ id: mode === "login" ? "demo-user" : "", name: "", email: mode === "login" ? "demo@jjupjjupdae.test" : "", password: mode === "login" ? "demo1234" : "", university: "" });
+  const [form, setForm] = useState({ id: mode === "login" ? "demo-user" : "", name: "", email: mode === "login" ? "demo@jjupjjupdae.test" : "", password: mode === "login" ? "demo1234" : "", university: "", accountType: "USER", restaurantName: "", businessNumber: "" });
   const [idChecked, setIdChecked] = useState(false);
   const [idMessage, setIdMessage] = useState("");
   const [terms, setTerms] = useState({ service: false, privacy: false });
@@ -37,6 +37,8 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
       <form onSubmit={submit} className="auth-form">
         {mode === "signup" && <label>아이디<div className="input-with-button"><input value={form.id} onChange={(e) => { setForm({ ...form, id: e.target.value }); setIdChecked(false); }} placeholder="아이디를 입력하세요" required /><button type="button" onClick={checkId}>중복확인</button></div>{idMessage && <small className={idChecked ? "id-ok" : "id-error"}>{idMessage}</small>}</label>}
         {mode === "signup" && <label>이름<input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="이름을 입력하세요" required /></label>}
+        {mode === "signup" && <label>계정 유형<select value={form.accountType} onChange={(e) => setForm({ ...form, accountType: e.target.value })}><option value="USER">일반 사용자</option><option value="OWNER">식당 사장님</option></select></label>}
+        {mode === "signup" && form.accountType === "OWNER" && <><label>식당명<input value={form.restaurantName} onChange={(e) => setForm({ ...form, restaurantName: e.target.value })} placeholder="운영 중인 식당명" required /></label><label>사업자등록번호(선택)<input value={form.businessNumber} onChange={(e) => setForm({ ...form, businessNumber: e.target.value })} placeholder="가입 승인 확인용" /></label></>}
         <label>{mode === "login" ? "아이디 또는 이메일" : "이메일"}<input type={mode === "login" ? "text" : "email"} value={mode === "login" ? form.id : form.email} onChange={(e) => setForm({ ...form, ...(mode === "login" ? { id: e.target.value, email: e.target.value.includes("@") ? e.target.value : form.email } : { email: e.target.value }) })} placeholder={mode === "login" ? "아이디 또는 이메일을 입력하세요" : "이메일을 입력하세요"} required /></label>
         <label>비밀번호<input type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder="비밀번호를 입력하세요" required /></label>
         {mode === "signup" && <label>학교<input value={form.university} onChange={(e) => setForm({ ...form, university: e.target.value })} placeholder="학교명을 입력하세요" required /></label>}
