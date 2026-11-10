@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 const items = [
-  { href: "/community", label: "커뮤니티", icon: "/assets/community.svg" },
+  { href: "/owner/restaurant", label: "식당 관리", icon: "/assets/edit.svg" },
   { href: "/owner/support", label: "관리자 상담", icon: "/assets/person.svg" },
   { href: "/owner/mypage", label: "마이페이지", icon: "/assets/mypage.svg" },
 ];
