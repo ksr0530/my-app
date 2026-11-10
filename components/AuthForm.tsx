@@ -101,7 +101,7 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
           {message && <p className="auth-error">{message}</p>}
           <button className="auth-submit" disabled={loading}>{loading ? "처리 중..." : mode === "login" ? "로그인" : form.accountType === "OWNER" ? "가입 요청하기" : "가입하기"}</button>
         </form>
-        {mode === "login" && <p className="demo-login-note">발표용 계정: <strong>demo-user / demo1234</strong></p>}
+        {mode === "login" && <p className="demo-login-note">일반 시연 계정: <strong>demo-user / demo1234</strong><br />관리자 시연 계정: <strong>admin / admin1234</strong></p>}
         <p className="auth-switch">{mode === "login" ? "아직 회원이 아니신가요?" : "이미 회원이신가요?"} <Link href={mode === "login" ? "/signup" : "/login"}>{mode === "login" ? "회원가입" : "로그인"}</Link></p>
       </div>
       {ownerComplete && <div className="owner-complete-backdrop"><div className="owner-complete-modal"><div className="verification-icon verified">✓</div><h2>가입 요청이 완료되었습니다!</h2><p>관리자 검토 후 3일 이내에 가입 승인 결과를 안내해드릴게요.</p><div className="confirm-actions"><button type="button" onClick={() => router.push("/login")}>로그인 화면으로 돌아가기</button><button type="button" onClick={() => router.push(`/owner/status?name=${encodeURIComponent(form.name)}&email=${encodeURIComponent(form.email)}`)}>승인 결과 조회하기</button></div></div></div>}
