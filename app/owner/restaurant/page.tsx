@@ -1,7 +1,7 @@
 "use client";
+import BrandHeader from "../../../components/BrandHeader";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { useUserStore } from "../../../store/userStore";
 
 type Review = {
@@ -53,6 +53,7 @@ export default function OwnerRestaurantPage() {
     success: false,
     message: "",
   });
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   useEffect(() => {
     fetch(
@@ -97,57 +98,40 @@ export default function OwnerRestaurantPage() {
   }
 
   async function save(event: React.FormEvent<HTMLFormElement>) {
-  event.preventDefault();
-
-  if (!restaurant) {
-    window.alert("식당 정보가 없습니다.");
-    return;
-  }
-
-  try {
-    const response = await fetch("/api/owner/restaurants", {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ownerId,
-        restaurantId: restaurant.restaurantId,
-        name,
-        description,
-        imageUrl,
-      }),
-    });
-
-    const data = await response.json().catch(() => ({}));
-
-    if (!response.ok) {
-      window.alert(data.message ?? "수정에 실패했습니다.");
+    event.preventDefault();
+    if (!restaurant) {
+      setModal({ open: true, success: false, message: "식당 정보가 없습니다." });
       return;
     }
-
-    setRestaurant((current) =>
-      current
-        ? {
-            ...current,
-            ...data.restaurant,
-            reviews: current.reviews,
-          }
-        : current,
-    );
-
-    setEditing(false);
-
-    window.alert("수정이 완료되었습니다.");
-  } catch {
-    window.alert("수정 중 오류가 발생했습니다.");
+    setConfirmOpen(true);
   }
-}
+
+  async function confirmSave() {
+    if (!restaurant) return;
+    setConfirmOpen(false);
+    try {
+      const response = await fetch("/api/owner/restaurants", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ownerId, restaurantId: restaurant.restaurantId, name, description, imageUrl }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setModal({ open: true, success: false, message: data.message ?? "수정에 실패했습니다." });
+        return;
+      }
+      setRestaurant((current) => current ? { ...current, ...data.restaurant, reviews: current.reviews } : current);
+      setEditing(false);
+      setModal({ open: true, success: true, message: "식당 정보가 수정되었습니다." });
+    } catch {
+      setModal({ open: true, success: false, message: "수정 중 오류가 발생했습니다." });
+    }
+  }
 
   return (
     <section className="page page-pad owner-restaurant-page">
-      <header className="subpage-header">
-        {editing ? (
+      <header className={`role-page-header ${editing ? "role-page-header-editing" : ""}`}>
+        {editing && (
           <button
             type="button"
             className="owner-back-button"
@@ -156,12 +140,8 @@ export default function OwnerRestaurantPage() {
           >
             ‹
           </button>
-        ) : (
-          <span aria-hidden="true" />
         )}
-
-        <h1>내 식당</h1>
-        <span aria-hidden="true" />
+        <BrandHeader title="내 식당" />
       </header>
 
       {editing ? (
@@ -312,7 +292,19 @@ export default function OwnerRestaurantPage() {
           </div>
         </div>
       )}
+      {confirmOpen && (
+        <div className="owner-result-modal-backdrop">
+          <div className="owner-result-modal" role="dialog" aria-modal="true">
+            <div className="owner-result-modal-icon success">?</div>
+            <h2>수정하시겠습니까?</h2>
+            <p>입력한 식당 정보로 수정할까요?</p>
+            <div className="confirm-actions">
+              <button type="button" onClick={() => setConfirmOpen(false)}>취소</button>
+              <button type="button" onClick={() => void confirmSave()}>수정하기</button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
-

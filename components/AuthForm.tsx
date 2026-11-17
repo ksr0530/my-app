@@ -20,6 +20,7 @@ const initialForm = {
 export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const router = useRouter();
   const setUser = useUserStore((state) => state.setUser);
+  const clearUser = useUserStore((state) => state.clearUser);
   const [form, setForm] = useState(mode === "login" ? { ...initialForm, id: "demo-user", email: "demo@jjupjjupdae.test", password: "demo1234" } : initialForm);
   const [idChecked, setIdChecked] = useState(false);
   const [idMessage, setIdMessage] = useState("");
@@ -29,6 +30,7 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [ownerComplete, setOwnerComplete] = useState(false);
+  const [ownerLoginNotice, setOwnerLoginNotice] = useState<{ name: string; email: string; status: string } | null>(null);
 
   async function checkId() {
     if (!form.id.trim()) { setIdMessage("아이디를 입력해주세요."); return; }
@@ -68,6 +70,11 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
       setOwnerComplete(true);
       return;
     }
+    if (mode === "login" && data.user?.role === "OWNER" && data.user.ownerApprovalStatus !== "APPROVED") {
+      clearUser();
+      setOwnerLoginNotice({ name: data.user.name, email: data.user.email, status: data.user.ownerApprovalStatus });
+      return;
+    }
     setUser(data.user);
     const destination = data.user?.role === "ADMIN" ? "/admin/owners" : data.user?.role === "OWNER" ? "/owner/restaurant" : "/home";
     router.push(destination);
@@ -105,6 +112,7 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
         <p className="auth-switch">{mode === "login" ? "아직 회원이 아니신가요?" : "이미 회원이신가요?"} <Link href={mode === "login" ? "/signup" : "/login"}>{mode === "login" ? "회원가입" : "로그인"}</Link></p>
       </div>
       {ownerComplete && <div className="owner-complete-backdrop"><div className="owner-complete-modal"><div className="verification-icon verified">✓</div><h2>가입 요청이 완료되었습니다!</h2><p>관리자 검토 후 3일 이내에 가입 승인 결과를 안내해드릴게요.</p><div className="confirm-actions"><button type="button" onClick={() => router.push("/login")}>로그인 화면으로 돌아가기</button><button type="button" onClick={() => router.push(`/owner/status?name=${encodeURIComponent(form.name)}&email=${encodeURIComponent(form.email)}`)}>승인 결과 조회하기</button></div></div></div>}
+      {ownerLoginNotice && <div className="owner-result-modal-backdrop"><div className="owner-result-modal" role="dialog" aria-modal="true"><div className={`owner-result-modal-icon ${ownerLoginNotice.status === "REJECTED" ? "error" : "success"}`}>{ownerLoginNotice.status === "REJECTED" ? "!" : "i"}</div><h2>{ownerLoginNotice.status === "REJECTED" ? "가입 승인이 반려되었어요" : "가입 승인 대기 중이에요"}</h2><p>{ownerLoginNotice.status === "REJECTED" ? "승인 결과 조회에서 반려 사유를 확인해주세요." : "관리자 승인 후 사장님 기능을 이용할 수 있어요."}</p><div className="confirm-actions"><button type="button" onClick={() => setOwnerLoginNotice(null)}>로그인 화면으로 돌아가기</button><button type="button" onClick={() => router.push(`/owner/status?name=${encodeURIComponent(ownerLoginNotice.name)}&email=${encodeURIComponent(ownerLoginNotice.email)}`)}>가입 승인 조회하기</button></div></div></div>}
     </section>
   );
 }

@@ -416,3 +416,14 @@ button, input, textarea, select { font: inherit; }
   font-size: 12px;
   line-height: 1.6;
 }
+
+
+/* Role page title headers: brand mark followed by the page name. */
+.role-page-header { display:flex; align-items:center; min-height:58px; padding:16px 0 12px; }
+.role-page-header .flex { padding:0; }
+.role-page-title { color:var(--navy); font-size:20px; font-weight:900; letter-spacing:-.06em; line-height:1.1; }
+.role-page-header-editing { gap:8px; }
+.role-page-header-editing .owner-back-button { flex:0 0 auto; }
+
+.role-page-header-with-back { justify-content:flex-start; gap:8px; }
+.role-page-header-with-back > .flex { padding:0; }

@@ -1,4 +1,5 @@
 "use client";
+import BrandHeader from "../../../components/BrandHeader";
 
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
@@ -64,9 +65,9 @@ export default function OwnerStatusPage() {
 
   return (
     <section className="page page-pad owner-status-page">
-      <header className="subpage-header">
-        <Link href="/owner/mypage" aria-label="사장님 마이페이지로 돌아가기">‹</Link>
-        <h1>회원가입 승인 결과 조회</h1>
+      <header className="subpage-header role-page-header role-page-header-with-back">
+        <Link href="/login" aria-label="로그인 화면으로 돌아가기">‹</Link>
+        <BrandHeader title="회원가입 승인 결과 조회" />
         <span />
       </header>
 
