@@ -349,3 +349,5 @@ button, input, textarea, select { font: inherit; }
 .bottom-nav-admin a[data-active="true"] img,.bottom-nav-owner a[data-active="true"] img{opacity:1}
 .report-trigger img{width:15px;height:15px;object-fit:contain}.bottom-nav-admin .admin-nav-icon,.bottom-nav-owner .owner-nav-icon{filter:brightness(0) invert(1)}
 .owner-restaurant-form{display:flex;flex-direction:column;gap:14px;margin-top:22px}.owner-restaurant-form label{display:flex;flex-direction:column;gap:6px;color:var(--navy);font-size:11px;font-weight:800}.owner-restaurant-form input,.owner-restaurant-form textarea{border:1px solid #c8c8c8;border-radius:8px;background:#fff;padding:11px;color:var(--navy);font-size:12px;outline:0}.owner-restaurant-form textarea{resize:vertical;line-height:1.6}
+
+.community-owner-actions{display:flex;justify-content:flex-end;gap:6px;border-top:1px solid rgba(26,52,79,.1);padding:8px 12px 10px}.community-edit-action,.community-delete-action{border-radius:999px;padding:5px 10px;font-size:10px;font-weight:900}.community-edit-action{background:#fff1b8;color:#1A344F}.community-delete-action{border:0;background:#f8dddd;color:#9d4545}

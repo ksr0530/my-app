@@ -20,6 +20,7 @@ export default function CommunityComposer() {
   const [verificationOpen, setVerificationOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [message, setMessage] = useState("");
+  const [saving, setSaving] = useState(false);
 
   function openConfirm() {
     if (!title.trim() || !description.trim()) { setMessage("제목과 내용을 입력해주세요."); return; }
@@ -27,14 +28,21 @@ export default function CommunityComposer() {
     setMessage(""); setConfirmOpen(true);
   }
 
-  function registerPost() {
-    const post: CommunityCard = { postId: `local-${Date.now()}`, title: title.trim(), description: description.trim(), category, currentCount: 1, targetCount: people, isClosed: false, author: user.name ?? "나", createdAt: new Date().toISOString().slice(0, 10) };
+  async function registerPost() {
+    if (!user.id) { setMessage("로그인이 필요합니다."); return; }
+    setSaving(true); setMessage("");
     try {
-      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "[]") as CommunityCard[];
-      localStorage.setItem(STORAGE_KEY, JSON.stringify([post, ...(Array.isArray(saved) ? saved : [])]));
-      window.dispatchEvent(new Event("jjeopjjeop:community-updated"));
-    } catch { /* the page can still return to the board */ }
-    setConfirmOpen(false); router.push("/community"); router.refresh();
+      const response = await fetch("/api/community", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ userId: user.id, title, content: description, category, targetCount: people }) });
+      if (!response.ok) {
+        const data = await response.json().catch(() => null) as { message?: string } | null;
+        setMessage(data?.message ?? `게시글을 등록하지 못했어요. (오류 코드 ${response.status})`); setSaving(false); return;
+      }
+      setConfirmOpen(false); router.push("/community"); router.refresh();
+    } catch {
+      const post: CommunityCard = { postId: `local-${Date.now()}`, userId: user.id, title: title.trim(), description: description.trim(), category, currentCount: 1, targetCount: people, isClosed: false, author: user.name ?? "나", createdAt: new Date().toISOString().slice(0, 10) };
+      try { const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "[]") as CommunityCard[]; localStorage.setItem(STORAGE_KEY, JSON.stringify([post, ...(Array.isArray(saved) ? saved : [])])); window.dispatchEvent(new Event("jjeopjjeop:community-updated")); } catch { /* ignore local fallback failure */ }
+      setConfirmOpen(false); router.push("/community"); router.refresh();
+    } finally { setSaving(false); }
   }
 
   return <section className="min-h-screen bg-[#FEEA9C] px-5 pb-28 pt-8 text-[#1A344F]"><header className="flex items-center justify-between"><Link href="/community" aria-label="커뮤니티로 돌아가기" className="flex h-9 w-9 items-center justify-center rounded-full bg-white/70 text-2xl leading-none">‹</Link><h1 className="text-[18px] font-black">글 작성</h1><span className="h-9 w-9" aria-hidden="true" /></header><p className="mt-2 text-center text-[11px] text-[#979797]">같이 먹을 친구를 모집해보세요.</p>
@@ -44,6 +52,6 @@ export default function CommunityComposer() {
     <div className="mt-5 rounded-[9px] border border-[#1A344F]/15 bg-white/65 p-3"><div className="flex items-center justify-between gap-3"><label className="flex items-center gap-2 text-[12px] font-bold"><input type="checkbox" checked={user.isStudentVerified} onChange={() => setVerificationOpen(true)} className="h-4 w-4 accent-[#1A344F]" />재학생 인증 완료</label><button type="button" onClick={() => setVerificationOpen(true)} className="text-[11px] font-bold text-[#2F4F71] underline underline-offset-2">인증 정보 확인</button></div><p className="mt-2 pl-6 text-[10px] leading-4 text-[#979797]">{user.isStudentVerified ? "재학생 인증이 완료되었어요." : "재학생 인증 후 밥친구 모집글을 작성할 수 있어요."}</p></div>
     {message && <p className="mt-3 text-center text-[10px] text-[#c15d5d]">{message}</p>}<button type="button" onClick={openConfirm} className="mt-7 h-12 w-full rounded-[7px] bg-[#1A344F] text-[13px] font-black text-white">작성 완료</button>
     <StudentVerificationModal open={verificationOpen} onClose={() => setVerificationOpen(false)} />
-    {confirmOpen && <div className="fixed inset-0 z-[60] flex items-center justify-center bg-[#1A344F]/40 px-6"><div className="w-full max-w-[340px] rounded-[14px] bg-white p-6 text-center text-[#1A344F]"><h2 className="text-[17px] font-black">게시글을 등록하시겠습니까?</h2><p className="mt-2 text-[11px] leading-5 text-[#979797]">{category} 카테고리, 모집 인원 {people}명으로 등록해요.</p><div className="mt-5 grid grid-cols-2 gap-2"><button type="button" onClick={() => setConfirmOpen(false)} className="h-11 rounded-[6px] border border-[#979797] text-[12px] font-bold">취소</button><button type="button" onClick={registerPost} className="h-11 rounded-[6px] bg-[#1A344F] text-[12px] font-bold text-white">등록하기</button></div></div></div>}
+    {confirmOpen && <div className="fixed inset-0 z-[60] flex items-center justify-center bg-[#1A344F]/40 px-6"><div className="w-full max-w-[340px] rounded-[14px] bg-white p-6 text-center text-[#1A344F]"><h2 className="text-[17px] font-black">게시글을 등록하시겠습니까?</h2><p className="mt-2 text-[11px] leading-5 text-[#979797]">{category} 카테고리, 모집 인원 {people}명으로 등록해요.</p><div className="mt-5 grid grid-cols-2 gap-2"><button type="button" onClick={() => setConfirmOpen(false)} className="h-11 rounded-[6px] border border-[#979797] text-[12px] font-bold">취소</button><button type="button" onClick={registerPost} disabled={saving} className="h-11 rounded-[6px] bg-[#1A344F] text-[12px] font-bold text-white">{saving ? "등록 중..." : "등록하기"}</button></div></div></div>}
   </section>;
 }
