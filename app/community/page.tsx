@@ -9,7 +9,6 @@ export default async function CommunityPage() {
     <section className="min-h-screen bg-[#FEEA9C] px-5 pb-28 pt-8 text-[#1A344F]">
       <header className="flex items-center justify-between">
         <BrandHeader compact />
-        <button type="button" aria-label="알림" className="flex h-9 w-9 items-center justify-center rounded-full bg-white/70 text-[18px]">♧</button>
       </header>
       <CommunityBoard initialPosts={posts} />
     </section>

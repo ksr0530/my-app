@@ -95,9 +95,9 @@ export async function getRestaurantById(restaurantId: string): Promise<Restauran
   return demoRestaurants.find((restaurant) => restaurant.restaurantId === restaurantId) ?? null;
 }
 
-function normalizeCommunity(row: { postId: string; userId: string; title: string; content?: string | null; category?: string | null; currentCount: number; targetCount: number; isClosed: boolean; createdAt?: Date; user: { name: string } }): CommunityCard {
+function normalizeCommunity(row: { postId: string; userId: string; title: string; currentCount: number; targetCount: number; isClosed: boolean; user: { name: string } }): CommunityCard {
   const fallback = demoCommunities.find((item) => item.postId === row.postId);
-  return { postId: row.postId, userId: row.userId, title: row.title, currentCount: row.currentCount, targetCount: row.targetCount, isClosed: row.isClosed, author: row.user.name, description: row.content ?? fallback?.description ?? "같이 주문하고 밥친구를 찾아요.", category: row.category ?? fallback?.category ?? "기타", createdAt: row.createdAt?.toISOString().slice(0, 10) ?? fallback?.createdAt };
+  return { postId: row.postId, userId: row.userId, title: row.title, currentCount: row.currentCount, targetCount: row.targetCount, isClosed: row.isClosed, author: row.user.name, description: fallback?.description ?? "같이 주문하고 밥친구를 찾아요.", category: fallback?.category ?? "기타", createdAt: fallback?.createdAt };
 }
 
 export async function getCommunities(): Promise<CommunityCard[]> {

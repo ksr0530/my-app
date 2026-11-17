@@ -65,7 +65,7 @@ export default function OwnerStatusPage() {
   return (
     <section className="page page-pad owner-status-page">
       <header className="subpage-header">
-        <Link href="/login" aria-label="로그인으로 돌아가기">‹</Link>
+        <Link href="/owner/mypage" aria-label="사장님 마이페이지로 돌아가기">‹</Link>
         <h1>회원가입 승인 결과 조회</h1>
         <span />
       </header>
@@ -93,7 +93,6 @@ export default function OwnerStatusPage() {
             </dl>
             <p className="owner-result-message">{copy.message}</p>
             {approval.status === "REJECTED" && approval.rejectReason && <p className="owner-reject-reason">반려 사유: {approval.rejectReason}</p>}
-            {approval.status === "APPROVED" && <Link className="primary-wide owner-result-link" href="/owner/mypage">사장님 페이지로 이동</Link>}
           </article>
         )}
       </section>

@@ -69,7 +69,7 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
       return;
     }
     setUser(data.user);
-    const destination = data.user?.role === "ADMIN" ? "/admin/owners" : data.user?.role === "OWNER" ? "/owner/mypage" : "/home";
+    const destination = data.user?.role === "ADMIN" ? "/admin/owners" : data.user?.role === "OWNER" ? "/owner/restaurant" : "/home";
     router.push(destination);
     router.refresh();
   }
