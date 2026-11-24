@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "db:seed": "prisma db seed",
-    "reset": "npx prisma db push --force-reset && npm run db:seed && npm run dev"
+    "reset": "npx prisma db push --force-reset && npm run db:seed && npm run dev",
+    "db:sync-kakao": "node scripts/sync-kakao.js"
   },
   "prisma": {
     "seed": "node prisma/seed.js"

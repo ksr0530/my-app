@@ -53,6 +53,7 @@ model User {
   reports             Report[]
   ownerApplications   OwnerApplication[]
   ownedRestaurants    Restaurant[]
+  searchHistories     SearchHistory[]
 }
 
 model Restaurant {
@@ -65,12 +66,19 @@ model Restaurant {
   avgRating    Float?            @default(0.0)
   category     String?           @db.VarChar(20)
   suitableFor  String?           @db.VarChar(40)
+  kakaoPlaceId String?           @unique @db.VarChar(50)
+  categoryName String?           @db.VarChar(255)
+  addressName  String?           @db.VarChar(255)
+  roadAddress  String?           @db.VarChar(255)
+  phone        String?           @db.VarChar(50)
+  placeUrl     String?           @db.VarChar(500)
   ownerId      String?           @db.VarChar(50)
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
   owner        User?             @relation(fields: [ownerId], references: [id])
   reviews      Review[]
   photos       RestaurantPhoto[]
+  menus        RestaurantMenu[]
 }
 
 model RestaurantPhoto {
@@ -156,4 +164,26 @@ model OwnerApplication {
   user           User                   @relation(fields: [userId], references: [id])
 
   @@index([status, createdAt])
+}
+
+model RestaurantMenu {
+  menuId       String     @id @default(cuid()) @db.VarChar(50)
+  restaurantId String     @db.VarChar(50)
+  name         String     @db.VarChar(100)
+  keywords     String?    @db.VarChar(255)
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [restaurantId], onDelete: Cascade)
+
+  @@index([name])
+  @@index([restaurantId])
+}
+
+model SearchHistory {
+  historyId String   @id @default(cuid()) @db.VarChar(50)
+  userId    String   @db.VarChar(50)
+  query     String   @db.VarChar(100)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([query])
 }
