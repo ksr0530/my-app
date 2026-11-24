@@ -92,6 +92,14 @@ button, input, textarea, select { font: inherit; }
 .summary-highlight span { color: #888; font-size: 9px; }
 .summary-highlight strong { font-size: 12px; }
 .ai-summary-popup ul { margin-top: 14px; }
+.ai-summary-state { padding: 28px 4px 12px; color: #666; font-size: 12px; line-height: 1.7; text-align: center; }
+.ai-summary-error button { margin-top: 10px; border: 0; border-radius: 999px; background: var(--navy); padding: 8px 14px; color: #fff; font-size: 11px; font-weight: 800; }
+.summary-keywords { margin: 12px 0; }
+.summary-keywords > span { display: block; margin-bottom: 7px; color: #888; font-size: 9px; }
+.summary-keywords > div { display: flex; flex-wrap: wrap; gap: 6px; }
+.summary-keywords strong { border-radius: 999px; background: #fff1b4; padding: 6px 9px; color: var(--navy); font-size: 10px; }
+.summary-keywords small { color: #9b7d22; font-size: 9px; }
+.summary-body { margin-top: 13px; color: #444; font-size: 11px; line-height: 1.7; }
 .map-category-row { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; padding: 10px 20px; }
 .map-category-chip { min-width: 0; height: 34px; overflow: hidden; border: 1px solid var(--muted); border-radius: 999px; background: #fff; color: var(--muted); font-size: 10px; white-space: nowrap; }
 .map-category-chip.active { border-color: var(--navy); background: var(--navy); color: var(--yellow); }

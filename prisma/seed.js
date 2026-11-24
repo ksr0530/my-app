@@ -52,6 +52,14 @@ const users = [
     university: "우리대학교",
     isStudentVerified: true,
   },
+  { id: "user-jieun", name: "한지은", email: "jieun@jjupjjupdae.test", password: "demo1234", university: "부천대학교", isStudentVerified: true },
+  { id: "user-dohyun", name: "김도현", email: "dohyun@jjupjjupdae.test", password: "demo1234", university: "부천대학교", isStudentVerified: true },
+  { id: "user-yuna", name: "오유나", email: "yuna@jjupjjupdae.test", password: "demo1234", university: "부천대학교", isStudentVerified: true },
+  { id: "user-geonu", name: "이건우", email: "geonu@jjupjjupdae.test", password: "demo1234", university: "부천대학교", isStudentVerified: true },
+  { id: "user-nari", name: "박나리", email: "nari@jjupjjupdae.test", password: "demo1234", university: "부천대학교", isStudentVerified: true },
+  { id: "user-seungmin", name: "최승민", email: "seungmin@jjupjjupdae.test", password: "demo1234", university: "부천대학교", isStudentVerified: true },
+  { id: "user-harin", name: "윤하린", email: "harin@jjupjjupdae.test", password: "demo1234", university: "부천대학교", isStudentVerified: true },
+  { id: "user-taeyang", name: "강태양", email: "taeyang@jjupjjupdae.test", password: "demo1234", university: "부천대학교", isStudentVerified: true },
   { id: "demo-owner", name: "청춘치킨 사장님", email: "owner@jjupjjupdae.test", password: "demo1234", university: "사업자", role: "OWNER", ownerApprovalStatus: "APPROVED" },
   { id: "owner-pending", name: "캠퍼스김밥 사장님", email: "pending-owner@jjupjjupdae.test", password: "demo1234", university: "사업자", role: "OWNER", ownerApprovalStatus: "PENDING" },
   { id: "owner-rejected", name: "마루덮밥 사장님", email: "rejected-owner@jjupjjupdae.test", password: "demo1234", university: "사업자", role: "OWNER", ownerApprovalStatus: "REJECTED" },
@@ -97,6 +105,22 @@ const reviews = [
   ["review-013", "user-minjun", "restaurant-010", "수업 끝나고 먹기 좋은 든든한 석식 메뉴예요.", 4, "2026-10-12"],
   ["review-014", "user-junho", "restaurant-003", "친구들과 나눠 먹기 좋은 메뉴예요.", 4, "2026-10-13"],
   ["review-015", "user-sarang", "restaurant-007", "배달메이트를 구해서 배달비를 아꼈어요.", 4, "2026-10-13"],
+  ["review-ai-001", "user-jieun", "restaurant-002", "김밥 종류가 다양하고 가격이 저렴해서 학생들이 먹기 좋아요.", 5, "2026-10-14"],
+  ["review-ai-002", "user-dohyun", "restaurant-002", "혼자 먹기 편하고 포장이 빨라서 수업 사이에 방문하기 좋아요.", 4, "2026-10-15"],
+  ["review-ai-003", "user-yuna", "restaurant-002", "참치김밥 재료가 신선하고 양도 든든합니다.", 5, "2026-10-16"],
+  ["review-ai-004", "user-geonu", "restaurant-002", "점심에는 사람이 많지만 회전이 빨라서 오래 기다리지는 않았어요.", 4, "2026-10-17"],
+  ["review-ai-005", "user-nari", "restaurant-005", "제육덮밥 양이 많고 가격 대비 만족도가 높아요.", 5, "2026-10-14"],
+  ["review-ai-006", "user-seungmin", "restaurant-005", "밥과 고기가 푸짐해서 든든하게 먹을 수 있습니다.", 5, "2026-10-15"],
+  ["review-ai-007", "user-harin", "restaurant-005", "매콤한 소스가 맛있고 혼밥하기 편한 분위기예요.", 4, "2026-10-16"],
+  ["review-ai-008", "user-taeyang", "restaurant-005", "주문이 빨라서 수업 전 점심으로 먹기 좋았어요.", 4, "2026-10-17"],
+  ["review-ai-009", "user-jieun", "restaurant-007", "치킨이 바삭하고 양이 많아서 친구들과 나눠 먹기 좋아요.", 5, "2026-10-14"],
+  ["review-ai-010", "user-dohyun", "restaurant-007", "배달이 빠르고 배달메이트와 함께 주문하면 비용을 아낄 수 있어요.", 4, "2026-10-15"],
+  ["review-ai-011", "user-yuna", "restaurant-007", "양념치킨 소스가 맛있고 여러 명이 먹기 좋은 구성이에요.", 5, "2026-10-16"],
+  ["review-ai-012", "user-geonu", "restaurant-007", "바삭한 식감이 좋고 주문 과정도 편했습니다.", 4, "2026-10-17"],
+  ["review-ai-013", "user-nari", "restaurant-008", "부대찌개 국물이 얼큰하고 양이 넉넉해요.", 5, "2026-10-14"],
+  ["review-ai-014", "user-seungmin", "restaurant-008", "사리 종류가 다양해서 여럿이 먹기 좋습니다.", 4, "2026-10-15"],
+  ["review-ai-015", "user-harin", "restaurant-008", "가격 대비 양이 괜찮고 따뜻하게 먹을 수 있어요.", 4, "2026-10-16"],
+  ["review-ai-016", "user-taeyang", "restaurant-008", "친구들과 방문하기 좋은 메뉴와 분위기였습니다.", 4, "2026-10-17"],
 ];
 
 const reportExamples = [
@@ -118,7 +142,6 @@ const communities = [
 ];
 
 async function main() {
-  await prisma.review.deleteMany({ where: { restaurantId: "restaurant-001" } });
   await prisma.community.deleteMany({ where: { title: "dd" } });
   for (const user of users) await prisma.user.upsert({ where: { id: user.id }, update: user, create: user });
   for (const restaurant of restaurants.map((item) => ({ ...item, ...restaurantMeta[item.restaurantId] }))) await prisma.restaurant.upsert({ where: { restaurantId: restaurant.restaurantId }, update: restaurant, create: restaurant });
