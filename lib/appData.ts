@@ -35,7 +35,24 @@ export type ReviewCard = {
   createdAt?: string;
 };
 
-export const BUCHEON_UNIVERSITY = { latitude: 37.4886, longitude: 126.7830 };
+export const BUCHEON_UNIVERSITY = { latitude: 37.4894, longitude: 126.7789 };
+export const BUCHEON_STATION = { latitude: 37.4840, longitude: 126.7826 };
+
+function distanceKm(a: { latitude: number; longitude: number }, b: { latitude: number; longitude: number }) {
+  const earthRadiusKm = 6371;
+  const dLat = (b.latitude - a.latitude) * Math.PI / 180;
+  const dLon = (b.longitude - a.longitude) * Math.PI / 180;
+  const lat1 = a.latitude * Math.PI / 180;
+  const lat2 = b.latitude * Math.PI / 180;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
+  return 2 * earthRadiusKm * Math.asin(Math.sqrt(h));
+}
+
+export function isInTargetRestaurantArea(latitude: number | null, longitude: number | null) {
+  if (latitude == null || longitude == null) return true;
+  const point = { latitude, longitude };
+  return distanceKm(point, BUCHEON_UNIVERSITY) <= 1 || distanceKm(point, BUCHEON_STATION) <= 1;
+}
 
 export const demoRestaurants: RestaurantCard[] = [
   { restaurantId: "restaurant-001", name: "학생식당 오늘한끼", description: "든든하고 저렴한 학교 앞 한식 백반집", avgRating: 4.5, reviewCount: 2, latitude: 37.4889, longitude: 126.7828, category: "한식", suitableFor: [1, 2, 4, 6] },
@@ -82,7 +99,8 @@ function normalizeRestaurant(row: { restaurantId: string; name: string; descript
 export async function getRestaurants(): Promise<RestaurantCard[]> {
   try {
     const rows = await prisma.restaurant.findMany({ include: { _count: { select: { reviews: true } } }, orderBy: { avgRating: "desc" } });
-    if (rows.length) return rows.map(normalizeRestaurant);
+    const nearbyRows = rows.filter((row) => isInTargetRestaurantArea(row.latitude, row.longitude));
+    if (nearbyRows.length) return nearbyRows.map(normalizeRestaurant);
   } catch { /* fallback */ }
   return demoRestaurants;
 }

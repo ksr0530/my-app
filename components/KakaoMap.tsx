@@ -37,7 +37,7 @@ export default function KakaoMap({ restaurants }: { restaurants: RestaurantCard[
     window.kakao.maps.load(() => {
       if (!containerRef.current || !window.kakao?.maps) return;
       const maps = window.kakao.maps;
-      const fallbackCenter = new maps.LatLng(37.4886, 126.7830);
+      const fallbackCenter = new maps.LatLng(37.4894, 126.7789);
       const map = new maps.Map(containerRef.current, { center: fallbackCenter, level: 4 });
       mapRef.current = map;
       const places = new maps.services.Places();

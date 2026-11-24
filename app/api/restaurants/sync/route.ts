@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../lib/prisma";
 
-const centers = [{ x: 126.783, y: 37.4886, label: "부천대학교" }, { x: 126.756, y: 37.484, label: "부천역" }];
+const centers = [{ x: 126.7789, y: 37.4894, label: "부천대학교" }, { x: 126.7826, y: 37.4840, label: "부천역" }];
 const queries = ["맛집", "식당", "분식", "한식", "치킨"];
 function apiKey() { return process.env.KAKAO_REST_API_KEY ?? process.env.KAKAO_API_KEY ?? process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY ?? ""; }
 export async function POST() {
@@ -10,7 +10,7 @@ export async function POST() {
   const documents = new Map<string, any>();
   try {
     for (const center of centers) for (const query of queries) {
-      const url = new URL("https://dapi.kakao.com/v2/local/search/keyword.json"); url.searchParams.set("query", `${center.label} ${query}`); url.searchParams.set("x", String(center.x)); url.searchParams.set("y", String(center.y)); url.searchParams.set("radius", "3000"); url.searchParams.set("size", "15"); url.searchParams.set("sort", "distance");
+      const url = new URL("https://dapi.kakao.com/v2/local/search/keyword.json"); url.searchParams.set("query", `${center.label} ${query}`); url.searchParams.set("x", String(center.x)); url.searchParams.set("y", String(center.y)); url.searchParams.set("radius", "1000"); url.searchParams.set("size", "15"); url.searchParams.set("sort", "distance");
       const response = await fetch(url, { headers: { Authorization: `KakaoAK ${key}` }, cache: "no-store" });
       if (!response.ok) continue; const data = await response.json(); for (const item of data.documents ?? []) if (item.category_group_code === "FD6" || item.category_group_name === "음식점") documents.set(item.id, item);
     }

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../lib/prisma";
+import { isInTargetRestaurantArea } from "../../../lib/appData";
 
 type Candidate = { restaurantId: string; name: string; description: string | null; category: string | null; categoryName: string | null; avgRating: number; reviewCount: number; menuNames: string[]; score: number };
 type AiPick = { restaurantId: string; reason: string };
@@ -31,7 +32,7 @@ export async function GET(request: Request) {
       userId ? prisma.searchHistory.findMany({ where: { userId }, orderBy: { createdAt: "desc" }, take: 20 }) : Promise.resolve([]),
     ]);
     const queries = histories.map((item) => item.query.toLowerCase());
-    const candidates: Candidate[] = restaurants.map((restaurant) => {
+    const candidates: Candidate[] = restaurants.filter((restaurant) => isInTargetRestaurantArea(restaurant.latitude, restaurant.longitude)).map((restaurant) => {
       const searchable = [restaurant.name, restaurant.categoryName, restaurant.category, restaurant.addressName, restaurant.roadAddress, ...restaurant.menus.flatMap((menu) => [menu.name, menu.keywords])].filter(Boolean).join(" ").toLowerCase();
       const matches = queries.filter((query) => searchable.includes(query));
       return { restaurantId: restaurant.restaurantId, name: restaurant.name, description: restaurant.description, category: restaurant.category, categoryName: restaurant.categoryName, avgRating: restaurant.avgRating ?? 0, reviewCount: restaurant._count.reviews, menuNames: restaurant.menus.map((menu) => menu.name), score: matches.length * 10 + (restaurant.avgRating ?? 0) * 2 + restaurant._count.reviews * 0.1 };
