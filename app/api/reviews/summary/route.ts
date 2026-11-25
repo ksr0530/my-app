@@ -12,10 +12,11 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // Gemini API 호출 (재시도 + 모델 폴백 포함)
 async function callGeminiWithFallback(prompt: string, apiKey: string): Promise<string> {
-  const primaryModel = process.env.GEMINI_MODEL?.trim() || "gemini-2.5-flash";
+  const configuredModel = process.env.GEMINI_MODEL?.trim();
+  const primaryModel = !configuredModel || configuredModel === "gemini-2.5-flash" ? "gemini-3.8-flash" : configuredModel;
   // 1순위: .env 설정 모델 -> 2순위: gemini-2.5-flash -> 3순위: gemini-2.0-flash
   const candidateModels = Array.from(
-    new Set([primaryModel, "gemini-2.5-flash", "gemini-2.0-flash"])
+    new Set([primaryModel, "gemini-3.8-flash", "gemini-2.0-flash"])
   );
 
   let lastError = "";

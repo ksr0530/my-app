@@ -1,0 +1,11 @@
+기존 C:\Users\bestf\Documents\GitHub\my-app 폴더에 이 폴더의 내용물을 그대로 덮어씁니다.
+
+포함된 수정 파일:
+- components\RestaurantDetail.tsx
+- app\api\recommendations\route.ts
+- app\api\reviews\summary\route.ts
+
+중요:
+- .env와 .env.local은 포함하지 않았습니다.
+- GEMINI_MODEL이 gemini-2.5-flash로 되어 있어도 코드가 gemini-3.8-flash를 사용하도록 처리했습니다.
+- 덮어쓴 뒤 Ctrl+C로 개발 서버를 종료하고 npm run dev로 다시 시작합니다.

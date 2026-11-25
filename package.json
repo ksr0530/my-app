@@ -9,7 +9,8 @@
     "lint": "eslint",
     "db:seed": "prisma db seed",
     "reset": "npx prisma db push --force-reset && npm run db:seed && npm run dev",
-    "db:sync-kakao": "node scripts/sync-kakao.js"
+    "db:sync-kakao": "node scripts/sync-kakao.js" , 
+    "db:seed:kakao-reviews" : "node scripts/seed-kakao-reviews.js"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
