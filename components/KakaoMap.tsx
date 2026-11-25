@@ -44,7 +44,7 @@ export default function KakaoMap({ restaurants }: { restaurants: RestaurantCard[
 
       const placeMarkers: Array<{ marker: { setMap: (map: KakaoMapInstance | null) => void }; info: { open: (map: KakaoMapInstance, marker: unknown) => void; close: () => void } }> = [];
       places.keywordSearch("부천대학교", (data, status) => {
-        if (status === "OK" && data[0]) {
+        if (status === maps.Status.OK && data[0]) {
           map.setCenter(new maps.LatLng(Number(data[0].y), Number(data[0].x)));
         }
       });

@@ -92,14 +92,6 @@ button, input, textarea, select { font: inherit; }
 .summary-highlight span { color: #888; font-size: 9px; }
 .summary-highlight strong { font-size: 12px; }
 .ai-summary-popup ul { margin-top: 14px; }
-.ai-summary-state { padding: 28px 4px 12px; color: #666; font-size: 12px; line-height: 1.7; text-align: center; }
-.ai-summary-error button { margin-top: 10px; border: 0; border-radius: 999px; background: var(--navy); padding: 8px 14px; color: #fff; font-size: 11px; font-weight: 800; }
-.summary-keywords { margin: 12px 0; }
-.summary-keywords > span { display: block; margin-bottom: 7px; color: #888; font-size: 9px; }
-.summary-keywords > div { display: flex; flex-wrap: wrap; gap: 6px; }
-.summary-keywords strong { border-radius: 999px; background: #fff1b4; padding: 6px 9px; color: var(--navy); font-size: 10px; }
-.summary-keywords small { color: #9b7d22; font-size: 9px; }
-.summary-body { margin-top: 13px; color: #444; font-size: 11px; line-height: 1.7; }
 .map-category-row { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; padding: 10px 20px; }
 .map-category-chip { min-width: 0; height: 34px; overflow: hidden; border: 1px solid var(--muted); border-radius: 999px; background: #fff; color: var(--muted); font-size: 10px; white-space: nowrap; }
 .map-category-chip.active { border-color: var(--navy); background: var(--navy); color: var(--yellow); }
@@ -360,3 +352,32 @@ button, input, textarea, select { font: inherit; }
 .owner-restaurant-view{margin-top:22px;border-radius:16px;background:#fff;padding:18px;box-shadow:0 2px 10px rgba(26,52,79,.06)}.owner-restaurant-image{display:flex;height:150px;align-items:center;justify-content:center;overflow:hidden;border-radius:12px;background:#fff7c9;font-size:42px}.owner-restaurant-image img{width:100%;height:100%;object-fit:cover}.owner-restaurant-view h2{margin-top:5px;color:var(--navy);font-size:20px;font-weight:900}.owner-restaurant-description{margin:12px 0 22px;color:#666;font-size:12px;line-height:1.7}.owner-edit-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}.owner-edit-heading h2{color:var(--navy);font-size:18px;font-weight:900}.text-button{border:0;background:transparent;color:#777;font-size:11px;font-weight:800}
 .owner-restaurant-title-row{display:flex;align-items:center;justify-content:space-between;margin-top:14px}.outline-small-button{border:1px solid var(--navy);border-radius:999px;background:#fff;padding:7px 15px;color:var(--navy);font-size:11px;font-weight:900}.owner-restaurant-score{display:flex;align-items:center;gap:7px;margin:10px 0 20px;color:var(--navy);font-size:11px}.owner-restaurant-score strong{font-size:18px}.owner-reviews-section{border-top:1px solid #eee;padding-top:16px}.owner-reviews-section h3{font-size:16px;font-weight:900;color:var(--navy)}
 .home-search-wrap{position:relative;z-index:20}.home-search-form{display:flex;align-items:center;gap:8px}.home-search-form input{min-width:0;flex:1;border:0;background:transparent;outline:0;font-size:12px;color:var(--navy)}.home-search-form button{border:0;background:var(--navy);border-radius:999px;padding:6px 10px;color:#fff;font-size:10px;font-weight:900}.search-suggestion-list{position:absolute;left:0;right:0;top:48px;overflow:hidden;border:1px solid rgba(26,52,79,.12);border-radius:12px;background:#fff;box-shadow:0 10px 25px rgba(26,52,79,.14)}.search-suggestion{display:flex;width:100%;align-items:center;gap:9px;border:0;border-bottom:1px solid #f0f0f0;background:#fff;padding:11px 13px;text-align:left;color:var(--navy)}.search-suggestion:last-child{border-bottom:0}.search-suggestion-icon{display:flex;height:27px;width:27px;align-items:center;justify-content:center;border-radius:50%;background:#fff0b5}.search-suggestion strong,.search-suggestion small{display:block}.search-suggestion strong{font-size:11px}.search-suggestion small{margin-top:3px;color:#888;font-size:9px}.search-suggestion>span:nth-child(2){min-width:0;flex:1}.recommendation-section{margin-top:8px}.recommendation-label{border-radius:999px;background:var(--navy);padding:4px 8px;color:#fff;font-size:9px;font-weight:900}.recommendation-list{display:flex;flex-direction:column;gap:8px}.recommendation-card{display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(26,52,79,.12);border-radius:11px;background:#fff;padding:12px 14px;color:var(--navy)}.recommendation-card strong{font-size:12px}.recommendation-card p{margin-top:4px;color:#c98719;font-size:10px;font-weight:800}.recommendation-card small{display:block;margin-top:5px;color:#888;font-size:9px}.recommendation-card>span{font-size:18px}
+
+/* Home AI recommendation tiles */
+.recommendation-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.recommendation-tile { overflow: hidden; border: 1px solid rgba(26,52,79,.18); border-radius: 10px; background: #fff; }
+.recommendation-image { display: flex; height: 92px; align-items: center; justify-content: center; background-position: center; background-size: cover; font-size: 36px; }
+.recommendation-image span { filter: drop-shadow(0 1px 0 rgba(255,255,255,.6)); }
+.recommendation-tile-body { min-height: 78px; padding: 8px 9px 10px; }
+.recommendation-tile-body strong { display: block; overflow: hidden; font-size: 12px; font-weight: 900; text-overflow: ellipsis; white-space: nowrap; }
+.recommendation-tile-body p { margin-top: 4px; color: var(--secondary); font-size: 9px; }
+.recommendation-tile-body small { display: -webkit-box; overflow: hidden; margin-top: 5px; color: #888; font-size: 9px; line-height: 1.35; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.recommendation-empty { border: 1px dashed rgba(26,52,79,.2); padding: 20px 10px; color: #888; font-size: 11px; text-align: center; }
+
+.related-keyword-box { border-bottom: 1px solid #eee; padding: 10px 12px 9px; background: #fffdf3; }
+.related-keyword-box strong { display: block; margin-bottom: 7px; color: var(--navy); font-size: 10px; }
+.related-keyword-box > div { display: flex; flex-wrap: wrap; gap: 5px; }
+.related-keyword-box button { border: 1px solid #d8c978; border-radius: 999px; background: #fff; padding: 5px 8px; color: var(--secondary); font-size: 10px; }
+
+/* Home spacing and recent search history */
+.home-search-wrap { margin: 0 20px; }
+.recent-search-box { margin-top: 10px; border: 1px solid rgba(26,52,79,.14); border-radius: 10px; background: rgba(255,255,255,.72); padding: 11px 12px; }
+.recent-search-heading { display: flex; align-items: center; justify-content: space-between; }
+.recent-search-heading strong { color: var(--navy); font-size: 12px; font-weight: 900; }
+.recent-search-heading button { border: 0; background: transparent; color: #888; font-size: 10px; }
+.recent-search-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
+.recent-search-list button { display: inline-flex; align-items: center; gap: 4px; border: 1px solid #e0d59a; border-radius: 999px; background: #fff; padding: 6px 9px; color: var(--secondary); font-size: 10px; }
+.recent-search-list button span { color: #999; font-size: 11px; }
+.home-page > .pt-2 { padding-top: 0; }
+.home-page .restaurant-section, .home-page .community-section { margin-top: 0; padding-top: 18px; padding-bottom: 18px; }
+.home-page .community-section { margin-top: 8px; }
