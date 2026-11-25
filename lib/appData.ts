@@ -33,6 +33,7 @@ export type ReviewCard = {
   author: string;
   restaurantName: string;
   createdAt?: string;
+  photos?: string[];
 };
 
 export const BUCHEON_UNIVERSITY = { latitude: 37.4894, longitude: 126.7789 };
@@ -91,14 +92,25 @@ export const demoReviews: ReviewCard[] = [
   { reviewId: "review-015", content: "배달메이트를 구해서 배달비를 아꼈어요.", rating: 4, author: "김사랑", restaurantName: "청춘 치킨", createdAt: "2026.10.13" },
 ];
 
-function normalizeRestaurant(row: { restaurantId: string; name: string; description: string | null; avgRating: number | null; latitude: number | null; longitude: number | null; category?: string | null; suitableFor?: string | null; _count?: { reviews: number } }): RestaurantCard {
+function classifyFoodCategory(value: string) {
+  if (value.includes("한식")) return "한식";
+  if (value.includes("분식")) return "분식";
+  if (value.includes("일식") || value.includes("일본") || value.includes("초밥") || value.includes("스시")) return "일식";
+  if (value.includes("중식") || value.includes("중국") || value.includes("짜장") || value.includes("짬뽕")) return "중식";
+  if (value.includes("치킨") || value.includes("닭") || value.includes("피자") || value.includes("패스트푸드") || value.includes("햄버거") || value.includes("버거")) return "패스트푸드";
+  return "기타";
+}
+
+function normalizeRestaurant(row: { restaurantId: string; name: string; description: string | null; categoryName?: string | null; avgRating: number | null; latitude: number | null; longitude: number | null; category?: string | null; suitableFor?: string | null; _count?: { reviews: number } }): RestaurantCard {
   const fallback = demoRestaurants.find((item) => item.restaurantId === row.restaurantId);
-  return { restaurantId: row.restaurantId, name: row.name, description: row.description ?? "학교 주변 인기 맛집", avgRating: row.avgRating ?? fallback?.avgRating ?? 0, reviewCount: row._count?.reviews ?? fallback?.reviewCount ?? 0, latitude: row.latitude ?? fallback?.latitude ?? null, longitude: row.longitude ?? fallback?.longitude ?? null, category: row.category ?? fallback?.category ?? "기타", suitableFor: row.suitableFor?.split(",").map(Number).filter(Boolean) ?? fallback?.suitableFor ?? [1, 2, 4] };
+  const categorySource = [row.categoryName, row.name, row.description].filter(Boolean).join(" ");
+  const category = row.category && row.category !== "기타" ? row.category : classifyFoodCategory(categorySource) === "기타" ? (row.category ?? fallback?.category ?? "기타") : classifyFoodCategory(categorySource);
+  return { restaurantId: row.restaurantId, name: row.name, description: row.description ?? "학교 주변 인기 맛집", avgRating: row.avgRating ?? fallback?.avgRating ?? 0, reviewCount: row._count?.reviews ?? fallback?.reviewCount ?? 0, latitude: row.latitude ?? fallback?.latitude ?? null, longitude: row.longitude ?? fallback?.longitude ?? null, category, suitableFor: row.suitableFor?.split(",").map(Number).filter(Boolean) ?? fallback?.suitableFor ?? [1, 2, 4] };
 }
 
 export async function getRestaurants(): Promise<RestaurantCard[]> {
   try {
-    const rows = await prisma.restaurant.findMany({ include: { _count: { select: { reviews: true } } }, orderBy: { avgRating: "desc" } });
+    const rows = await prisma.restaurant.findMany({ include: { _count: { select: { reviews: { where: { deletedAt: null } } } } }, orderBy: { avgRating: "desc" } });
     const nearbyRows = rows.filter((row) => isInTargetRestaurantArea(row.latitude, row.longitude));
     if (nearbyRows.length) return nearbyRows.map(normalizeRestaurant);
   } catch { /* fallback */ }
@@ -107,15 +119,15 @@ export async function getRestaurants(): Promise<RestaurantCard[]> {
 
 export async function getRestaurantById(restaurantId: string): Promise<RestaurantCard | null> {
   try {
-    const row = await prisma.restaurant.findUnique({ where: { restaurantId }, include: { _count: { select: { reviews: true } } } });
+    const row = await prisma.restaurant.findUnique({ where: { restaurantId }, include: { _count: { select: { reviews: { where: { deletedAt: null } } } } } });
     if (row) return normalizeRestaurant(row);
   } catch { /* fallback */ }
   return demoRestaurants.find((restaurant) => restaurant.restaurantId === restaurantId) ?? null;
 }
 
-function normalizeCommunity(row: { postId: string; userId: string; title: string; currentCount: number; targetCount: number; isClosed: boolean; user: { name: string } }): CommunityCard {
+function normalizeCommunity(row: { postId: string; userId: string; title: string; content: string | null; category: string | null; currentCount: number; targetCount: number; isClosed: boolean; createdAt: Date; user: { name: string } }): CommunityCard {
   const fallback = demoCommunities.find((item) => item.postId === row.postId);
-  return { postId: row.postId, userId: row.userId, title: row.title, currentCount: row.currentCount, targetCount: row.targetCount, isClosed: row.isClosed, author: row.user.name, description: fallback?.description ?? "같이 주문하고 밥친구를 찾아요.", category: fallback?.category ?? "기타", createdAt: fallback?.createdAt };
+  return { postId: row.postId, userId: row.userId, title: row.title, currentCount: row.currentCount, targetCount: row.targetCount, isClosed: row.isClosed, author: row.user.name, description: row.content ?? fallback?.description ?? "같이 주문하고 밥친구를 찾아요.", category: row.category ?? fallback?.category ?? "기타", createdAt: row.createdAt.toISOString().slice(0, 10) };
 }
 
 export async function getCommunities(): Promise<CommunityCard[]> {
@@ -136,16 +148,16 @@ export async function getCommunityById(postId: string): Promise<CommunityCard | 
 
 export async function getReviews(): Promise<ReviewCard[]> {
   try {
-    const rows = await prisma.review.findMany({ where: { deletedAt: null }, include: { user: true, restaurant: true }, orderBy: { createdAt: "desc" }, take: 30 });
-    if (rows.length) return rows.map((row) => ({ reviewId: row.reviewId, userId: row.userId, content: row.content, rating: row.rating, author: row.user.name, restaurantName: row.restaurant.name, createdAt: row.createdAt.toISOString().slice(0, 10) }));
+    const rows = await prisma.review.findMany({ where: { deletedAt: null }, include: { user: true, restaurant: true, photos: true }, orderBy: { createdAt: "desc" }, take: 30 });
+    return rows.map((row) => ({ reviewId: row.reviewId, userId: row.userId, content: row.content, rating: row.rating, author: row.user.name, restaurantName: row.restaurant.name, createdAt: row.createdAt.toISOString().slice(0, 10), photos: row.photos.map((photo) => photo.photoUrl) }));
   } catch { /* fallback */ }
   return demoReviews;
 }
 
 export async function getReviewsForRestaurant(restaurantId: string, restaurantName: string): Promise<ReviewCard[]> {
   try {
-    const rows = await prisma.review.findMany({ where: { restaurantId, deletedAt: null }, include: { user: true, restaurant: true }, orderBy: { createdAt: "desc" } });
-    if (rows.length) return rows.map((row) => ({ reviewId: row.reviewId, userId: row.userId, content: row.content, rating: row.rating, author: row.user.name, restaurantName: row.restaurant.name, createdAt: row.createdAt.toISOString().slice(0, 10) }));
+    const rows = await prisma.review.findMany({ where: { restaurantId, deletedAt: null }, include: { user: true, restaurant: true, photos: true }, orderBy: { createdAt: "desc" } });
+    return rows.map((row) => ({ reviewId: row.reviewId, userId: row.userId, content: row.content, rating: row.rating, author: row.user.name, restaurantName: row.restaurant.name, createdAt: row.createdAt.toISOString().slice(0, 10), photos: row.photos.map((photo) => photo.photoUrl) }));
   } catch { /* fallback */ }
   return demoReviews.filter((review) => review.restaurantName === restaurantName);
 }

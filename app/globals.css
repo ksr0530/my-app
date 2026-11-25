@@ -160,7 +160,11 @@ button, input, textarea, select { font: inherit; }
 .rating-picker { display: flex; gap: 7px; margin: 18px 0 16px; cursor: ew-resize; touch-action: none; }
 .rating-picker button { color: #c6c6c6; font-size: 30px; line-height: 1; }
 .rating-picker button.selected { color: var(--navy); }
-.photo-add-button { width: 100%; height: 36px; border: 1px solid #a8a8a8; border-radius: 5px; background: #fff; color: var(--navy); font-size: 11px; font-weight: 800; }
+.photo-add-button { display: flex; width: 100%; height: 36px; align-items: center; justify-content: center; border: 1px solid #a8a8a8; border-radius: 5px; background: #fff; color: var(--navy); cursor: pointer; font-size: 11px; font-weight: 800; }
+.review-more-button { display: block; width: 100%; margin-top: 12px; padding: 10px; border: 0; background: transparent; color: var(--navy); font-size: 12px; font-weight: 800; }
+.edit-action-row { display: grid; grid-template-columns: 1fr 88px; gap: 8px; align-items: center; }
+.edit-action-row .primary-wide { width: 100%; }
+.delete-wide { height: 44px; border: 1px solid #c56b6b; border-radius: 6px; background: #fff; color: #b24d4d; font-size: 12px; font-weight: 800; }
 .review-composer-main textarea { width: 100%; min-height: 136px; margin-top: 12px; resize: vertical; border: 1px solid #d0d0d0; border-radius: 5px; background: #fff; padding: 12px; outline: none; color: var(--navy); font-size: 12px; }
 .review-composer-main textarea:focus { border-color: var(--navy); }
 .submit-review-button { width: 100%; height: 40px; margin-top: 12px; border-radius: 5px; background: var(--navy); color: var(--yellow); font-size: 12px; font-weight: 800; }
@@ -383,3 +387,29 @@ button, input, textarea, select { font: inherit; }
 .home-page .community-section { margin-top: 8px; }
 
 .search-more-button { display: block; width: 100%; height: 38px; margin: 8px auto 0; border: 0; background: transparent; padding: 0; color: var(--navy); font-size: 11px; font-weight: 900; }
+.review-more-button { display: block; width: 100%; margin: 12px auto 0; border: 0; background: transparent; color: var(--navy); font-size: 12px; font-weight: 800; text-align: center; }
+.review-selected-photos { display: flex; justify-content: center; gap: 6px; margin: 8px 0; }
+.review-selected-photos img { width: 42px; height: 42px; border-radius: 5px; object-fit: cover; }
+.community-detail-top > span { display: flex; align-items: center; gap: 6px; }
+.community-detail-top .detail-header-action, .community-detail-top .report-trigger { display: inline-flex; width: auto; height: 28px; align-items: center; justify-content: center; padding: 0 8px; border: 1px solid rgba(26,52,79,.35); border-radius: 5px; background: transparent; color: var(--navy); font-size: 11px; font-weight: 800; }
+
+/* Final requested button/photo sizing */
+.search-more-button, .map-more-button { border: 0 !important; border-top: 0 !important; border-radius: 0 !important; text-align: center; }
+.review-selected-photos img { width: 28px !important; height: 28px !important; border-radius: 4px; }
+.community-header-actions { display: flex !important; flex-direction: row !important; align-items: center !important; gap: 5px !important; }
+.community-header-button { display: inline-flex !important; width: auto !important; min-width: 38px !important; height: 28px !important; align-items: center !important; justify-content: center !important; margin: 0 !important; border: 1px solid rgba(26,52,79,.35) !important; border-radius: 5px !important; background: transparent !important; padding: 0 8px !important; color: var(--navy) !important; font-size: 11px !important; font-weight: 800 !important; line-height: 1 !important; }
+
+/* Correct final UI: only more buttons are borderless; action buttons keep borders */
+.search-more-button, .map-more-button { border: 0 !important; border-top: 0 !important; border-radius: 0 !important; background: transparent !important; text-align: center; }
+.photo-add-button { height: 42px; border: 1px solid var(--navy) !important; border-radius: 5px; background: #fff !important; color: var(--navy) !important; font-size: 12px; }
+.review-selected-photos { display: flex; justify-content: flex-start; gap: 8px; margin: 10px 0 4px; }
+.review-selected-photo { position: relative; width: 88px; height: 88px; overflow: visible; }
+.review-selected-photo img { display: block; width: 88px !important; height: 88px !important; border: 1px solid #ddd; border-radius: 8px; object-fit: cover; }
+.review-selected-photo button { position: absolute; top: -5px; right: -5px; z-index: 1; display: flex; width: 21px; height: 21px; align-items: center; justify-content: center; border: 2px solid #fff; border-radius: 50%; background: #444; color: #fff; font-size: 14px; line-height: 1; }
+.community-header-actions { display: flex !important; flex-direction: row !important; align-items: center !important; gap: 5px !important; }
+.community-header-button { display: inline-flex !important; width: auto !important; min-width: 38px !important; height: 28px !important; align-items: center !important; justify-content: center !important; border: 1px solid #a8a8a8 !important; border-radius: 5px !important; background: #fff !important; padding: 0 8px !important; color: var(--navy) !important; font-size: 11px !important; font-weight: 800 !important; line-height: 1 !important; }
+/* 커뮤니티 상세 제목은 오른쪽 액션 버튼 수와 무관하게 중앙 정렬 */
+.community-detail-top { position: relative; min-height: 54px; }
+.community-detail-top h1 { position: absolute; top: 50%; left: 50%; margin: 0; transform: translate(-50%, -50%); white-space: nowrap; text-align: center; }
+.community-detail-top > .back-button { position: relative; z-index: 1; }
+.community-detail-top > .community-header-actions { position: relative; z-index: 1; margin-left: auto; }

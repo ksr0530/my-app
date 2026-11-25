@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "../../../lib/prisma";
 
 export async function POST(request: Request) {
-  const body = await request.json().catch(() => null) as { userId?: string; restaurantId?: string; content?: string; rating?: number } | null;
+  const body = await request.json().catch(() => null) as { userId?: string; restaurantId?: string; content?: string; rating?: number; photoUrls?: string[] } | null;
   if (!body?.userId || !body.restaurantId || !body.content?.trim() || !body.rating || body.rating < 1 || body.rating > 5) return NextResponse.json({ message: "리뷰 내용과 별점을 확인해주세요." }, { status: 400 });
   try {
     const user = await prisma.user.findUnique({ where: { id: body.userId } });
@@ -10,8 +10,17 @@ export async function POST(request: Request) {
     if (!user.isStudentVerified) return NextResponse.json({ message: "재학생 인증 후 리뷰를 작성할 수 있습니다." }, { status: 403 });
     const restaurant = await prisma.restaurant.findUnique({ where: { restaurantId: body.restaurantId } });
     if (!restaurant) return NextResponse.json({ message: "식당 정보를 찾을 수 없습니다." }, { status: 404 });
-    const review = await prisma.review.create({ data: { reviewId: `review-${Date.now()}`, userId: body.userId, restaurantId: body.restaurantId, content: body.content.trim(), rating: body.rating } });
-    const aggregate = await prisma.review.aggregate({ where: { restaurantId: body.restaurantId }, _avg: { rating: true } });
+    const review = await prisma.review.create({
+      data: {
+        reviewId: `review-${Date.now()}`,
+        userId: body.userId,
+        restaurantId: body.restaurantId,
+        content: body.content.trim(),
+        rating: body.rating,
+        photos: body.photoUrls?.length ? { create: body.photoUrls.slice(0, 5).map((photoUrl) => ({ photoUrl })) } : undefined,
+      },
+    });
+    const aggregate = await prisma.review.aggregate({ where: { restaurantId: body.restaurantId, deletedAt: null }, _avg: { rating: true } });
     await prisma.restaurant.update({ where: { restaurantId: body.restaurantId }, data: { avgRating: aggregate._avg.rating ?? 0 } });
     return NextResponse.json({ reviewId: review.reviewId }, { status: 201 });
   } catch {

@@ -54,7 +54,7 @@ export async function GET(request: Request) {
   const userId = new URL(request.url).searchParams.get("userId");
   try {
     const [restaurants, histories] = await Promise.all([
-      prisma.restaurant.findMany({ include: { _count: { select: { reviews: true } }, menus: true }, orderBy: [{ avgRating: "desc" }, { name: "asc" }], take: 30 }),
+      prisma.restaurant.findMany({ include: { _count: { select: { reviews: { where: { deletedAt: null } } } }, menus: true }, orderBy: [{ avgRating: "desc" }, { name: "asc" }], take: 30 }),
       userId ? prisma.searchHistory.findMany({ where: { userId }, orderBy: { createdAt: "desc" }, take: 20 }) : Promise.resolve([]),
     ]);
     const queries = histories.map((item) => item.query.toLowerCase());

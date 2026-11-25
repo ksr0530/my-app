@@ -38,22 +38,24 @@ enum OwnerApplicationStatus {
 }
 
 model User {
-  id                  String              @id @db.VarChar(50)
-  name                String              @db.VarChar(50)
-  email               String              @unique @db.VarChar(100)
-  password            String              @db.VarChar(255)
-  university          String              @db.VarChar(50)
-  isStudentVerified   Boolean?            @default(false)
-  role                UserRole            @default(USER)
-  ownerApprovalStatus OwnerApprovalStatus @default(NONE)
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-  reviews             Review[]
-  communities         Community[]
-  reports             Report[]
-  ownerApplications   OwnerApplication[]
-  ownedRestaurants    Restaurant[]
-  searchHistories     SearchHistory[]
+  id                   String              @id @db.VarChar(50)
+  name                 String              @db.VarChar(50)
+  email                String              @unique @db.VarChar(100)
+  password             String              @db.VarChar(255)
+  university           String              @db.VarChar(50)
+  isStudentVerified    Boolean?            @default(false)
+  role                 UserRole            @default(USER)
+  ownerApprovalStatus  OwnerApprovalStatus @default(NONE)
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  reviews              Review[]
+  communities          Community[]
+  reports              Report[]
+  ownerApplications    OwnerApplication[]
+  ownedRestaurants     Restaurant[]
+  searchHistories      SearchHistory[]
+  comments             CommunityComment[]
+  communityMemberships CommunityMember[]
 }
 
 model Restaurant {
@@ -114,19 +116,21 @@ model ReviewPhoto {
 }
 
 model Community {
-  postId       String    @id @db.VarChar(50)
-  userId       String    @db.VarChar(50)
-  title        String    @db.VarChar(255)
-  content      String?   @db.Text
-  category     String?   @db.VarChar(20)
+  postId       String             @id @db.VarChar(50)
+  userId       String             @db.VarChar(50)
+  title        String             @db.VarChar(255)
+  content      String?            @db.Text
+  category     String?            @db.VarChar(20)
   targetCount  Int
-  currentCount Int       @default(1)
-  isClosed     Boolean   @default(false)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  currentCount Int                @default(1)
+  isClosed     Boolean            @default(false)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
   deletedAt    DateTime?
-  user         User      @relation(fields: [userId], references: [id])
+  user         User               @relation(fields: [userId], references: [id])
   reports      Report[]
+  comments     CommunityComment[]
+  members      CommunityMember[]
 
   @@index([userId, deletedAt])
 }
@@ -148,6 +152,31 @@ model Report {
   post        Community?       @relation(fields: [postId], references: [postId])
 
   @@index([targetType, status, createdAt])
+}
+
+model CommunityComment {
+  commentId String    @id @default(cuid()) @db.VarChar(50)
+  postId    String    @db.VarChar(50)
+  userId    String    @db.VarChar(50)
+  content   String    @db.Text
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  post      Community @relation(fields: [postId], references: [postId], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id])
+
+  @@index([postId, createdAt])
+}
+
+model CommunityMember {
+  membershipId String    @id @default(cuid()) @db.VarChar(50)
+  postId       String    @db.VarChar(50)
+  userId       String    @db.VarChar(50)
+  joinedAt     DateTime  @default(now())
+  post         Community @relation(fields: [postId], references: [postId], onDelete: Cascade)
+  user         User      @relation(fields: [userId], references: [id])
+
+  @@unique([postId, userId])
+  @@index([postId, joinedAt])
 }
 
 model OwnerApplication {
