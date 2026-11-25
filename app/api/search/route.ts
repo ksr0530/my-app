@@ -50,12 +50,13 @@ export async function GET(request: Request) {
       where: { OR: [{ name: { contains: query } }, { categoryName: { contains: query } }, { addressName: { contains: query } }, { roadAddress: { contains: query } }, { menus: { some: { OR: [{ name: { contains: query } }, { keywords: { contains: query } }] } } }] },
       include: { menus: true }, orderBy: [{ avgRating: "desc" }, { name: "asc" }], take: 100,
     });
-    let nearbyRows = rows.filter((row) => isInTargetRestaurantArea(row.latitude, row.longitude)).slice(0, 8);
+    let nearbyRows = rows.filter((row) => isInTargetRestaurantArea(row.latitude, row.longitude)).slice(0, 3);
     if (!nearbyRows.length) nearbyRows = (await searchKakao(query)).map((row) => ({ ...row, menus: [] }));
+    nearbyRows = nearbyRows.slice(0, 3);
     const menuKeywords = rows.flatMap((row) => row.menus.map((menu) => menu.name)).filter(Boolean);
     const relatedKeywords = [...new Set([...menuKeywords, ...relatedKeywordPool])]
       .filter((keyword) => keyword !== query && (keyword.includes(query) || query.includes(keyword)))
-      .slice(0, 6);
+      .slice(0, 3);
     return NextResponse.json({ relatedKeywords, suggestions: nearbyRows.map((row) => ({ restaurantId: row.restaurantId, name: row.name, category: row.categoryName ?? row.category ?? "음식점", address: row.roadAddress ?? row.addressName ?? "부천대학교 주변", menuNames: row.menus.slice(0, 3).map((menu) => menu.name) })) });
   } catch { return NextResponse.json({ suggestions: [] }); }
 }

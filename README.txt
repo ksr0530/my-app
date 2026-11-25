@@ -1,3 +1,4 @@
-동기 AI·리뷰·사용자 기능을 보존하기 위한 검색 API 단독 ZIP입니다.
-덮어쓰는 파일은 app/api/search/route.ts 하나뿐입니다.
-app/api/recommendations/route.ts와 components/HomeDiscovery.tsx는 포함하지 않습니다.
+검색 결과 3개 + 네 번째 더보기 버튼 기능만 포함한 부분 ZIP입니다.
+연관검색어는 최대 3개, 식당 자동완성은 최대 3개입니다.
+네 번째 더보기 버튼을 누르면 /map?query=검색어로 이동합니다.
+app/api/recommendations/route.ts, 리뷰, 사용자 API는 포함하지 않습니다.
