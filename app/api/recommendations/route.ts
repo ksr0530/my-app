@@ -21,7 +21,17 @@ async function askGemini(candidates: Candidate[], queries: string[]): Promise<{ 
   const requestBody = JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.3, responseMimeType: "application/json", maxOutputTokens: 1200, thinkingConfig: { thinkingBudget: 0 } } });
   let response: Response | undefined;
   for (let attempt = 0; attempt < 3; attempt += 1) {
-    response = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: requestBody, cache: "no-store" });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 12000);
+    try {
+      response = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: requestBody, cache: "no-store", signal: controller.signal });
+    } catch (error) {
+      clearTimeout(timeout);
+      if (attempt === 2) return { picks: [], error: error instanceof Error && error.name === "AbortError" ? "Gemini 요청이 12초 안에 응답하지 않았습니다." : `Gemini 네트워크 오류: ${error instanceof Error ? error.message : "알 수 없는 오류"}` };
+      await new Promise((resolve) => setTimeout(resolve, 800 * (attempt + 1)));
+      continue;
+    }
+    clearTimeout(timeout);
     if (response.ok || ![429, 500, 502, 503, 504].includes(response.status) || attempt === 2) break;
     await new Promise((resolve) => setTimeout(resolve, 800 * (attempt + 1)));
   }
