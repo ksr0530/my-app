@@ -13,17 +13,25 @@ async function askGemini(candidates: Candidate[], queries: string[]): Promise<{ 
   const key = process.env.GEMINI_API_KEY;
   if (!key) return { picks: [], error: "GEMINI_API_KEY가 서버 환경변수에 없습니다." };
   if (!candidates.length) return { picks: [], error: "추천할 식당 후보가 DB에 없습니다." };
-  const model = process.env.GEMINI_MODEL ?? "gemini-2.5-flash";
+  const configuredModel = process.env.GEMINI_MODEL?.trim();
+  const model = !configuredModel || configuredModel === "gemini-2.5-flash" ? "gemini-3.8-flash" : configuredModel;
   const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`;
     const compact = candidates.slice(0, 20).map(({ restaurantId, name, description, categoryName, avgRating, reviewCount, menuNames }) => ({ restaurantId, name, description, category: categoryName, avgRating, reviewCount, menus: menuNames }));
   const prompt = `너는 부천대학교와 부천역 주변 식당 추천 도우미야. 사용자의 최근 검색어를 참고해서 후보 식당 중 최대 4개를 고르고, 각 식당을 추천하는 자연스러운 한국어 이유를 1문장으로 작성해. 검색어가 없으면 평점과 리뷰 수를 고려해 인기 식당을 추천해. 반드시 JSON 배열만 반환하고 마크다운은 쓰지 마. 각 원소 형식은 {"restaurantId":"후보 ID","reason":"추천 이유"}야. 최근 검색어: ${JSON.stringify(queries)} 후보: ${JSON.stringify(compact)}`;
-  const response = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.3, responseMimeType: "application/json", maxOutputTokens: 800 } }), cache: "no-store" });
+  const requestBody = JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.3, responseMimeType: "application/json", maxOutputTokens: 1200, thinkingConfig: { thinkingBudget: 0 } } });
+  let response: Response | undefined;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    response = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: requestBody, cache: "no-store" });
+    if (response.ok || ![429, 500, 502, 503, 504].includes(response.status) || attempt === 2) break;
+    await new Promise((resolve) => setTimeout(resolve, 800 * (attempt + 1)));
+  }
+  if (!response) return { picks: [], error: "Gemini 응답이 없습니다." };
   if (!response.ok) {
     const errorBody = await response.text().catch(() => "");
     return { picks: [], error: `Gemini API ${response.status}: ${errorBody.slice(0, 180)}` };
   }
   const data = await response.json();
-  const text = data.candidates?.[0]?.content?.parts?.map((part: { text?: string }) => part.text ?? "").join("") ?? "[]";
+  const text = data.candidates?.[0]?.content?.parts?.map((part: { text?: string }) => part.text ?? "").join("")?.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim() ?? "[]";
   try {
     const parsed = JSON.parse(text) as AiPick[];
     return { picks: Array.isArray(parsed) ? parsed.filter((item) => candidates.some((candidate) => candidate.restaurantId === item.restaurantId) && item.reason).slice(0, 4) : [], error: Array.isArray(parsed) ? undefined : "Gemini 응답이 배열 형식이 아닙니다." };
