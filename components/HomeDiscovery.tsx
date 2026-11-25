@@ -72,7 +72,7 @@ export default function HomeDiscovery() {
       {(relatedKeywords.length > 0 || suggestions.length > 0) && <div className="search-suggestion-list">
         {relatedKeywords.length > 0 && <div className="related-keyword-box"><strong>연관검색어</strong><div>{relatedKeywords.slice(0, 3).map((keyword) => <button type="button" key={keyword} onClick={() => setQuery(keyword)}>#{keyword}</button>)}</div></div>}
         {suggestions.map((item) => <button type="button" key={item.restaurantId} className="search-suggestion" onClick={() => void search(item)}><span className="search-suggestion-icon">⌖</span><span><strong>{item.name}</strong><small>{item.category} · {item.address}</small></span><span>›</span></button>)}
-        {suggestions.length > 0 && <button type="button" className="search-more-button" onClick={() => router.push(`/map?query=${encodeURIComponent(query.trim())}`)}>식당 더보기 <span>›</span></button>}
+        {suggestions.length > 0 && <button type="button" className="search-more-button" onClick={() => router.push(`/map?query=${encodeURIComponent(query.trim())}`)}>식당 더보기 ›</button>}
       </div>}
     </div>
     <section className="home-section restaurant-section">

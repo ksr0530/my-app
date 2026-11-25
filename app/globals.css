@@ -382,5 +382,4 @@ button, input, textarea, select { font: inherit; }
 .home-page .restaurant-section, .home-page .community-section { margin-top: 0; padding-top: 18px; padding-bottom: 18px; }
 .home-page .community-section { margin-top: 8px; }
 
-.search-more-button { display: flex; width: 100%; align-items: center; justify-content: space-between; border: 0; border-top: 1px solid #eee; background: #fffdf3; padding: 12px 14px; color: var(--navy); font-size: 11px; font-weight: 900; }
-.search-more-button span { font-size: 18px; font-weight: 400; }
+.search-more-button { display: block; width: 100%; height: 38px; margin: 8px auto 0; border: 0; background: transparent; padding: 0; color: var(--navy); font-size: 11px; font-weight: 900; }
